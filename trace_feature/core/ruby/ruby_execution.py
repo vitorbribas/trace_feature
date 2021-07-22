@@ -176,7 +176,10 @@ class RubyExecution(BaseExecution):
             for k in json_data:
                 for i in json_data[k]['coverage']:
                     if i:
-                        self.run_file(i, json_data[k]['coverage'][i], scenario)
+                        if isinstance(json_data[k]['coverage'][i], dict):
+                            self.run_file(i, json_data[k]['coverage'][i]['lines'], scenario)
+                        elif isinstance(json_data[k]['coverage'][i], list):
+                            self.run_file(i, json_data[k]['coverage'][i], scenario)
         print('Number of executed Methods: ', str(len(scenario.executed_methods)))
 
     def run_file_with_it(self, filename, cov_result, it):
