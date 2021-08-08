@@ -358,8 +358,12 @@ class RubyExecution(BaseExecution):
             return True
         else:
             for line in range(def_line, end_line):
-                if cov_result[line]:
-                    return True
+                if isinstance(cov_result, dict):
+                    if cov_result['lines'][line]:
+                        return True
+                elif isinstance(cov_result, list):
+                    if cov_result[line]:
+                        return True
             return False
 
     def is_empty_class(self, file):
