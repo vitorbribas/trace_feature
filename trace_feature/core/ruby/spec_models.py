@@ -1,4 +1,9 @@
+"""
+    Module which declares auxiliary classes for specs execution
+"""
+
 class Method:
+    """ Method object """
 
     def __init__(self):
         self.method_id = ""
@@ -22,6 +27,8 @@ class Method:
 
 
 class It:
+    """ It object """
+
     def __init__(self):
         self.project = ""
         self.key = ""
@@ -35,4 +42,5 @@ class It:
         return self.description
 
     def obj_dict(self):
+        """ Return a dictionary or other mapping object. """
         return self.__dict__
