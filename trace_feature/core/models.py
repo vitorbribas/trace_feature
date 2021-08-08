@@ -9,11 +9,11 @@ class Project:
     """
         Project object
     """
-    def __init__(self):
-        self.name = ""
-        self.language = ""
-        self.repository = ""
-        self.methods = []
+    def __init__(self, name='', language='', repository='', methods=[]):
+        self.name = name
+        self.language = language
+        self.repository = repository
+        self.methods = methods
 
     def __str__(self):
         print('PROJETO:')
