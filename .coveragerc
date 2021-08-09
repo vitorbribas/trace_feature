@@ -1,0 +1,8 @@
+[report]
+include =
+    # report only trace_feature source files
+    */trace_feature/*
+
+omit =
+    # omit __init__.py source files from coverage report
+    */__init__.py
