@@ -33,16 +33,17 @@ class Feature:
         Feature object
     """
 
-    def __init__(self):
-        self.path_name = ""
-        self.feature_name = ""
-        self.scenarios = []
-        self.language = ""
-        self.user_story = ""
-        self.tags = []
-        self.line = None
-        self.background = None
-        self.project = ""
+    def __init__(self, path_name="", feature_name="", scenarios=[], language="", user_story="",
+                 tags=[], line=None, background=None, project=""):
+        self.path_name = path_name
+        self.feature_name = feature_name
+        self.scenarios = scenarios
+        self.language = language
+        self.user_story = user_story
+        self.tags = tags
+        self.line = line
+        self.background = background
+        self.project = project
 
     def __str__(self):
         return self.feature_name
