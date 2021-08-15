@@ -91,11 +91,11 @@ class Scenario(ABC):
 class SimpleScenario(Scenario):
     """ Simple scenario object """
 
-    def __init__(self):
-        self.steps = []
-        self.scenario_title = ""
-        self.line = None
-        self.executed_methods = []
+    def __init__(self, steps=[], scenario_title="", line=None, executed_methods=[]):
+        self.steps = steps
+        self.scenario_title = scenario_title
+        self.line = line
+        self.executed_methods = executed_methods
 
     def execute(self):
         pass
@@ -148,25 +148,26 @@ class ScenarioOutline(Scenario):
 class StepBdd:
     """ BDD step object """
 
-    def __init__(self):
-        self.line = None
-        self.keyword = ""
-        self.text = ""
+    def __init__(self, line=None, keyword='', text=''):
+        self.line = line
+        self.keyword = keyword
+        self.text = text
 
 
 class Method:
     """ Method object """
 
-    def __init__(self):
-        self.line = None
-        self.method_id = ""
-        self.method_name = ""
-        self.class_name = ""
-        self.class_path = ""
-        self.abc_score = 0
-        self.complexity = 0
-        self.number_of_lines = 0
-        self.content = ""
+    def __init__(self, line=None, method_id="", method_name="", class_name="", class_path="",
+                 abc_score=0, complexity=0, number_of_lines=0, content=""):
+        self.line = line
+        self.method_id = method_id
+        self.method_name = method_name
+        self.class_name = class_name
+        self.class_path = class_path
+        self.abc_score = abc_score
+        self.complexity = complexity
+        self.number_of_lines = number_of_lines
+        self.content = content
 
     def __str__(self):
         print("METHOD:")
