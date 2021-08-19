@@ -32,7 +32,7 @@ def read_all_bdds(project_path):
     :return: Array of Feature objects
     """
     features = []
-    for root, dirs, files in os.walk(project_path + '/features/'):
+    for root, files in os.walk(project_path + '/features/'):
         for file in files:
             if file.endswith(".feature"):
                 file_path = os.path.join(root, file)
