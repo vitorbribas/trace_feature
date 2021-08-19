@@ -18,7 +18,7 @@ class BaseExecution(ABC):
 
     # this method will execute only a specific feature
     @abstractmethod
-    def execute_feature(self, path, filename):
+    def execute_feature(self, project, feature_name):
         """
             BaseExecution execute for specific feature
         """
@@ -27,7 +27,7 @@ class BaseExecution(ABC):
     # filename: refer to the .feature file
     # scenario_ref: refer to the line or the name of a specific scenario
     @abstractmethod
-    def execute_scenario(self, filename, scenario_ref):
+    def execute_scenario(self, feature_name, scenario):
         """
             BaseExecution execute for specific scenario into a specific feature
         """
