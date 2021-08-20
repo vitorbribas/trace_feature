@@ -78,20 +78,18 @@ class Scenario(ABC):
     @abstractmethod
     def execute(self):
         """ Execute scenario """
-        pass
 
     @abstractmethod
     def set_line(self):
         """
             Set line
         """
-        pass
-
 
 class SimpleScenario(Scenario):
     """ Simple scenario object """
 
     def __init__(self, steps=[], scenario_title="", line=None, executed_methods=[]):
+        super().__init__()
         self.steps = steps
         self.scenario_title = scenario_title
         self.line = line
@@ -122,6 +120,7 @@ class ScenarioOutline(Scenario):
     """ Scenario outline object """
 
     def __init__(self):
+        super().__init__()
         self.steps = []
         self.scenario_title = ""
         self.line = None
@@ -130,19 +129,15 @@ class ScenarioOutline(Scenario):
 
     def execute(self):
         """ Execute a scenario outline """
-        pass
 
     def set_line(self):
         """ Set the line of a scenario outline """
-        pass
 
     def add(self):
         """ Add a scenario outline """
-        pass
 
     def remove(self):
         """ Remove a scenario outline """
-        pass
 
 
 class StepBdd:

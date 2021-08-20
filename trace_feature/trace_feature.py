@@ -1,3 +1,7 @@
+"""
+    Main module that defines interaction commands and overhaul project comportament
+"""
+
 import os
 import sys
 import click
