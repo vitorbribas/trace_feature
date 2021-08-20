@@ -110,7 +110,7 @@ class RubyExecution(BaseExecution):
         # except BrokenPipeError:
         #     pass
         # process.wait()
-        # TODO: analyse this print
+        # TO DO: analyse this print
         with open('coverage/cucumber/.resultset.json') as opened_file:
             json_data = json.load(opened_file)
             for k in json_data:
@@ -196,7 +196,7 @@ class RubyExecution(BaseExecution):
         # except BrokenPipeError:
         #     pass
         # process.wait()
-        # TODO: analyse this print
+        # TO DO: analyse this print
         with open('coverage/cucumber/.resultset.json') as opened_file:
             json_data = json.load(opened_file)
             for k in json_data:
@@ -316,7 +316,8 @@ class RubyExecution(BaseExecution):
         # be in the token though. For example:
         #    def foo(x, y)
         # would become 'foo(x,'. We then separate those parts.
-            name, parenthesis, rest = name_token.partition('(')
+        # First element from name_token.partition('(') returns name
+            name = name_token.partition('(')[0]
 
         return name
 

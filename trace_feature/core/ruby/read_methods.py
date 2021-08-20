@@ -30,13 +30,17 @@ def get_content(method, filename):
         line = linecache.getline(filename, current_line)
         content += line
         tokens = line.split()
+
         # If we have a line that requires a matching 'end', we increase the
         # number of blocks.
+
         if any(token in tokens for token in block_tokens):
             remaining_blocks += 1
+
         # Likewise, if we found an 'end', we decrease the number of blocks.
         # When it gets to zero, that means we have reached the end of the
         # method.
+
         if 'end' in tokens:
             remaining_blocks -= 1
         current_line += 1

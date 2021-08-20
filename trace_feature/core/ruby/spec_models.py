@@ -2,21 +2,22 @@
     Module which declares auxiliary classes for specs execution
 """
 
-class Method:
-    """ Method object """
+# Use models.py Method class instead
+# class Method:
+#     """ Method object """
 
-    def __init__(self):
-        self.method_id = ""
-        self.method_name = ""
-        self.class_name = ""
-        self.class_path = ""
+#     def __init__(self):
+#         self.method_id = ""
+#         self.method_name = ""
+#         self.class_name = ""
+#         self.class_path = ""
 
-    def __str__(self):
-        print("METHOD:")
-        print("\t\t\t name: " + self.method_name)
-        print("\t\t\t classe: " + self.class_name)
-        print("\t\t\t path: " + self.class_path)
-        return ''
+#     def __str__(self):
+#         print("METHOD:")
+#         print("\t\t\t name: " + self.method_name)
+#         print("\t\t\t classe: " + self.class_name)
+#         print("\t\t\t path: " + self.class_path)
+#         return ''
 
 
 # Ver a necessidade de utilizar a modelo de Describe tb.. acho que não precisa.
