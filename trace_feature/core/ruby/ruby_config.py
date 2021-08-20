@@ -29,12 +29,10 @@ class RubyConfig(BaseConfig):
             print('Rails project!')
             if self.__verify_requirements(self, project_path):
                 return True
-            else:
-                self.__check_gemfile(project_path)
-                subprocess.call(['bundle', 'install'], cwd=project_path)
-                return self.__check_environment(project_path)
-        else:
-            return False
+            self.__check_gemfile(project_path)
+            subprocess.call(['bundle', 'install'], cwd=project_path)
+            return self.__check_environment(project_path)
+        return False
 
     @classmethod
     def __is_rails_project(cls, path):
