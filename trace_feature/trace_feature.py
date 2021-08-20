@@ -86,7 +86,7 @@ def trace(analyse, methods, spec, lista, project, feature, scenario):
             install_excellent_gem()
             project_methods.methods = analyse_methods(project_methods.methods)
         else:
-            #  TODO language = find_language(path)
+            #  TO DO: language = find_language(path)
             language = 'Ruby'
 
             if language == 'Ruby':
