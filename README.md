@@ -102,3 +102,14 @@ Aguardar a conclusão da análise de todos os métodos do projeto e executar:
 trace-feature
 ```
 
+### Testes:
+Para executar os testes em conjunto com o output de cobertura, use o comando:
+```shell
+pytest -v --cov
+```
+
+Para visualizar a cobertura dos testes em uma página HTML, execute:
+```shell
+pytest -v --cov --cov-report=html
+```
+E abra o arquivo index.html do diretório `htmlcov`
