@@ -1,0 +1,15 @@
+[
+  {
+    "file_path": "/home/vitorribas/Documentos/monitoriaCIC/app/models/user.rb",
+    "methods": [
+      { "class_name": "User", "method_name": "nth_validation_digit" },
+      { "class_name": "User", "method_name": "valid_cpf" },
+      { "class_name": "User", "method_name": "create_reset_digest" },
+      { "class_name": "User", "method_name": "send_password_reset_email" },
+      { "class_name": "User", "method_name": "password_reset_expired?" },
+      { "class_name": "User", "method_name": "authenticated?" },
+      { "class_name": "User", "method_name": "fake_method" }
+    ],
+    "result": "Excellent result:\n\n  /home/vitorribas/Documentos/monitoriaCIC/app/models/user.rb\n    * Line   1: User does not specify attr_accessible.\n    * Line  41: User#nth_validation_digit has cyclomatic complexity of 3.\n    * Line  41: User#nth_validation_digit has 13 lines.\n    * Line  60: User#valid_cpf has abc score of 18.027756377319946.\n    * Line  60: User#valid_cpf has cyclomatic complexity of 4.\n    * Line  60: User#valid_cpf has 9 lines.\n    * Line  62: For loop used.\n    * Line  75: User.digest has cyclomatic complexity of 2.\n    * Line  82: User.new_token has cyclomatic complexity of 1.\n    * Line  87: User#create_reset_digest has cyclomatic complexity of 1.\n    * Line  87: User#create_reset_digest has 5 lines.\n    * Line  94: User#send_password_reset_email has cyclomatic complexity of 1.\n    * Line  94: User#send_password_reset_email has 3 lines.\n    * Line  99: User#password_reset_expired? has cyclomatic complexity of 1.\n    * Line  99: User#password_reset_expired? has 3 lines.\n    * Line 104: User#authenticated? has cyclomatic complexity of 2.\n    * Line 104: User#authenticated? has 5 lines.\n\n  Found 17 warnings."
+  }
+]
