@@ -121,6 +121,7 @@ def send_all_methods(project):
     # file.write(json_string)
     request = requests.post("http://localhost:8000/createmethods", json=json_string)
     print(request.status_code, request.reason)
+    return request.status_code
 
 
 def install_excellent_gem():
