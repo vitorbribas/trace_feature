@@ -1,11 +1,13 @@
 import pytest
 import os
 import json
+import linecache
 from types import SimpleNamespace
 from trace_feature.core.models import Project, Method
 from trace_feature.core.ruby.read_methods import (get_methods_line, install_excellent_gem,
                                                   send_all_methods, get_abc_score,
-                                                  get_cyclomatic_complexity, get_number_of_lines)
+                                                  get_cyclomatic_complexity, get_number_of_lines,
+                                                  get_content)
 from trace_feature.core.ruby.ruby_execution import RubyExecution
 
 
@@ -107,3 +109,13 @@ class TestReadMethodsInstance:
     for read_method in methods:
       number_of_files_by_method.append(get_number_of_lines(parsed_excellent_analysis.result, read_method))
     assert number_of_files_by_method == [13, 9, 5, 3, 3, 5, 0]
+
+  def test_get_content(self, methods_file_path):
+    with open(methods_file_path) as opened_file:
+      method_content = get_content(41, methods_file_path)
+      content = ""
+      for line_number in [*range(41, 60)]:
+        content += linecache.getline(methods_file_path, line_number)
+        line_number += 1
+
+      assert method_content == content
