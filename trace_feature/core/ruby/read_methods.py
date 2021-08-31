@@ -34,8 +34,9 @@ def get_content(method, filename):
         # If we have a line that requires a matching 'end', we increase the
         # number of blocks.
 
-        if any(token in tokens for token in block_tokens):
-            remaining_blocks += 1
+        if tokens:
+            if any(token in tokens for token in block_tokens) or (tokens[0] in ['if', 'unless']):
+                remaining_blocks += 1
 
         # Likewise, if we found an 'end', we decrease the number of blocks.
         # When it gets to zero, that means we have reached the end of the
