@@ -157,7 +157,7 @@ def get_abc_score(result, method):
         Get ABC score from a method
     """
 
-    result = re.split('\* Line  |\* Line ', result)
+    result = re.split(r'\* Line  |\* Line ', result)
 
     for line in result:
         if method.class_name + "#" in line:
@@ -178,7 +178,7 @@ def get_cyclomatic_complexity(result, method):
         Get cyclomatic complexity from a method
     """
 
-    result = re.split('\* Line  |\* Line ', result)
+    result = re.split(r'\* Line  |\* Line ', result)
 
     for line in result:
         if method.class_name + "#" in line:
@@ -199,7 +199,7 @@ def get_number_of_lines(result, method):
         Get number of lines from a method
     """
 
-    result = re.split('\* Line  |\* Line ', result)
+    result = re.split(r'\* Line  |\* Line ', result)
 
     for line in result:
         if method.class_name + "#" in line:
