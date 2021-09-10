@@ -1,20 +1,26 @@
+"""
+    Module that defines ruby execution
+"""
+
 import os
 
+import linecache
+import subprocess
+import json
 import requests
 from trace_feature.core.ruby.spec_models import It
 
 from trace_feature.core.base_execution import BaseExecution
 from trace_feature.core.features.gherkin_parser import read_all_bdds, get_scenario, read_feature
 from trace_feature.core.models import Feature, Method, SimpleScenario, Project
-import linecache
-import subprocess
-import json
-import re
 
 from trace_feature.core.ruby.ruby_spec_execution import read_specs
 
 
 class RubyExecution(BaseExecution):
+    """
+       Main class that defines ruby execution flow
+    """
 
     def __init__(self):
         self.class_definition_line = None
@@ -22,31 +28,50 @@ class RubyExecution(BaseExecution):
         self.project = Project()
         self.feature = Feature()
         self.scenario = SimpleScenario()
-        self.it = It()
+        self.it_spec = It()
 
     def execute_specs(self, path):
+        """
+            This method execute target project specs
+            :param path: base path of the project
+            :return: None
+        """
+
         specs = read_specs(path)
         self.project = self.get_project_infos(path)
         for spec in specs:
             self.method_definition_lines = []
             self.class_definition_line = []
-            self.it = spec
-            self.it.project = self.project
-            self.execute_it(self.it)
+            self.it_spec = spec
+            self.it_spec.project = self.project
+            self.execute_it(self.it_spec)
 
     def prepare_scenario(self, feature_path, scenario_line):
+        """
+            This method prepares scenario for main ruby execution flow
+            :param feature_path: a feature path
+            :param scenario_line: scenario line that will be prepared
+            :return: None
+        """
         scenario = get_scenario(feature_path, scenario_line)
         self.execute_scenario(feature_path, scenario)
         self.send_information(True)
 
-    def execute_it(self, it):
-        print('Executing It: ', it.description)
-        # signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-        p = subprocess.Popen(["bundle", "exec", "rspec", it.file + ":" + str(it.line)],
-                             stdout=subprocess.PIPE)
+    def execute_it(self, it_spec):
+        """
+            This method executes It
+            :param it_spec: spec it test block
+            :return: None
+        """
 
-        # Catches Tuple first element and decode it                     
-        test_message = p.communicate()[0]
+        print('Executing It: ', it_spec.description)
+        # signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+        process = subprocess.Popen(["bundle", "exec", "rspec",
+                                    it_spec.file + ":" + str(it_spec.line)],
+                                   stdout=subprocess.PIPE)
+
+        # Catches Tuple first element and decode it_spec
+        test_message = process.communicate()[0]
         test_message = test_message.decode('utf-8')
 
         print(test_message)
@@ -69,7 +94,7 @@ class RubyExecution(BaseExecution):
         #     print("There are no pending tests. \n")
         #
         # if test_failed[0] != "0":
-        #     print(test_failed[0] + " tests in this it block \n")
+        #     print(test_failed[0] + " tests in this it_spec block \n")
         # else:
         #     print("There are no failed tests. \n")
         #
@@ -81,24 +106,24 @@ class RubyExecution(BaseExecution):
         #     print(test_success + "tests successed \n")
 
         # try:
-        #     p.stdout.close()
+        #     process.stdout.close()
         # except BrokenPipeError:
         #     pass
-        # p.wait()
-        # TODO: analyse this print
-        with open('coverage/cucumber/.resultset.json') as f:
-            json_data = json.load(f)
+        # process.wait()
+        # TO DO: analyse this print
+        with open('coverage/cucumber/.resultset.json') as opened_file:
+            json_data = json.load(opened_file)
             for k in json_data:
                 for i in json_data[k]['coverage']:
                     if i:
-                        self.run_file_with_it(i, json_data[k]['coverage'][i], it)
-        self.it.project = self.project
-        self.it.key = it.file + str(it.line)
-        print('Number of executed Methods: ', str(len(it.executed_methods)))
-        print(self.it.description)
-        print('Linha: ', self.it.line)
-        print('Arquivo: ', self.it.file)
-        print('Métodos: ', self.it.executed_methods)
+                        self.run_file_with_it(i, json_data[k]['coverage'][i], it_spec)
+        self.it_spec.project = self.project
+        self.it_spec.key = it_spec.file + str(it_spec.line)
+        print('Number of executed Methods: ', str(len(it_spec.executed_methods)))
+        print(self.it_spec.description)
+        print('Linha: ', self.it_spec.line)
+        print('Arquivo: ', self.it_spec.file)
+        print('Métodos: ', self.it_spec.executed_methods)
 
         # dado = input('Type Enter to continue..')
         self.send_information(False)
@@ -160,19 +185,20 @@ class RubyExecution(BaseExecution):
         # os.environ['RAILS_ENV'] = "test"
         print('Executing Scenario: ', scenario.scenario_title)
         # signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-        p = subprocess.Popen(["bundle", "-v"], stdout=subprocess.PIPE)
-        print(p.communicate())
-        p = subprocess.Popen(["bundle", "exec", "rake", "cucumber", "FEATURE=" + feature_name + ":" + str(scenario.line)],
-                         stdout=subprocess.PIPE)
-        print(p.communicate())
+        process = subprocess.Popen(["bundle", "-v"], stdout=subprocess.PIPE)
+        print(process.communicate())
+        process = subprocess.Popen(["bundle", "exec", "rake", "cucumber", "FEATURE=" +
+                                    feature_name + ":" + str(scenario.line)],
+                                   stdout=subprocess.PIPE)
+        print(process.communicate())
         # try:
-        #     p.stdout.close()
+        #     process.stdout.close()
         # except BrokenPipeError:
         #     pass
-        # p.wait()
-        # TODO: analyse this print
-        with open('coverage/cucumber/.resultset.json') as f:
-            json_data = json.load(f)
+        # process.wait()
+        # TO DO: analyse this print
+        with open('coverage/cucumber/.resultset.json') as opened_file:
+            json_data = json.load(opened_file)
             for k in json_data:
                 for i in json_data[k]['coverage']:
                     if i:
@@ -182,7 +208,7 @@ class RubyExecution(BaseExecution):
                             self.run_file(i, json_data[k]['coverage'][i], scenario)
         print('Number of executed Methods: ', str(len(scenario.executed_methods)))
 
-    def run_file_with_it(self, filename, cov_result, it):
+    def run_file_with_it(self, filename, cov_result, it_spec):
         """This method will execute a specific feature file
         :param filename: the  name of the feature file
         :param cov_result: a array containing the result os simpleCov for some method
@@ -203,11 +229,15 @@ class RubyExecution(BaseExecution):
                     if self.class_definition_line is None:
                         new_method.class_name = 'None'
                     else:
-                        new_method.class_name = self.get_method_or_class_name(self.class_definition_line, filename)
+                        new_method.class_name = self.get_method_or_class_name(
+                            self.class_definition_line,
+                            filename
+                        )
                     new_method.class_path = filename
-                    new_method.method_id = filename + self.get_method_or_class_name(method,
-                                                                                    filename) + str(method)
-                    it.executed_methods.append(new_method)
+                    new_method.method_id = filename + self.get_method_or_class_name(
+                        method, filename
+                    ) + str(method)
+                    it_spec.executed_methods.append(new_method)
 
     def run_file(self, filename, cov_result, scenario):
         """This method will execute a specific feature file
@@ -230,14 +260,17 @@ class RubyExecution(BaseExecution):
                     if self.class_definition_line is None:
                         new_method.class_name = 'None'
                     else:
-                        new_method.class_name = self.get_method_or_class_name(self.class_definition_line, filename)
+                        new_method.class_name = self.get_method_or_class_name(
+                            self.class_definition_line, filename
+                        )
                     new_method.class_path = filename
-                    new_method.method_id = filename + self.get_method_or_class_name(method,
-                                                                                    filename) + str(method)
+                    new_method.method_id = filename + self.get_method_or_class_name(
+                        method, filename) + str(method)
 
                     scenario.executed_methods.append(new_method)
 
-    def is_method(self, line):
+    @classmethod
+    def is_method(cls, line):
         """Verify if is the line is a method definition.
         :param line: Line content.
         :return: True if is a method definition, False if not.
@@ -250,7 +283,8 @@ class RubyExecution(BaseExecution):
             return first_token == 'def'
         return False
 
-    def is_class(self, line):
+    @classmethod
+    def is_class(cls, line):
         """Verify if this line is a class definition.
         :param line: Line content.
         :return: true if is a class, false if not.
@@ -260,10 +294,11 @@ class RubyExecution(BaseExecution):
         tokens = line.split()
         if tokens:
             first_token = tokens[0]
-            return first_token == 'class' or first_token == 'module'
+            return first_token in ('class', 'module')
         return False
 
-    def get_method_or_class_name(self, line_number, filename):
+    @classmethod
+    def get_method_or_class_name(cls, line_number, filename):
         """Method that get the name of Methods and Classes
         :param line_number: the number of the line.
         :param filename: the file that contains this line.
@@ -277,11 +312,12 @@ class RubyExecution(BaseExecution):
         if len(line.split()) > 1:
             name_token = line.split()[1]
 
-        # If the method definition contains parameters, part of it will also
+        # If the method definition contains parameters, part of it_spec will also
         # be in the token though. For example:
         #    def foo(x, y)
         # would become 'foo(x,'. We then separate those parts.
-            name, parenthesis, rest = name_token.partition('(')
+        # First element from name_token.partition('(') returns name
+            name = name_token.partition('(')[0]
 
         return name
 
@@ -323,7 +359,8 @@ class RubyExecution(BaseExecution):
             if not self.was_executed(line, filename, cov_result):
                 self.method_definition_lines.remove(line)
 
-    def was_executed(self, def_line, filename, cov_result):
+    @classmethod
+    def was_executed(cls, def_line, filename, cov_result):
         """Verify if a definitions was executed.
         :param def_line: Line of a definition.
         :param filename: the file that contains this definition.
@@ -346,7 +383,7 @@ class RubyExecution(BaseExecution):
             if any(token in tokens for token in block_tokens):
                 remaining_blocks += 1
             # Likewise, if we found an 'end', we decrease the number of blocks.
-            # When it gets to zero, that means we have reached the end of the
+            # When it_spec gets to zero, that means we have reached the end of the
             # method.
             if 'end' in tokens:
                 remaining_blocks -= 1
@@ -356,11 +393,14 @@ class RubyExecution(BaseExecution):
 
         if end_line - def_line <= 1:
             return True
-        else:
-            for line in range(def_line, end_line):
+        for line in range(def_line, end_line):
+            if isinstance(cov_result, dict):
+                if cov_result['lines'][line]:
+                    return True
+            elif isinstance(cov_result, list):
                 if cov_result[line]:
                     return True
-            return False
+        return False
 
     def is_empty_class(self, file):
         """Verify if a class contains any method
@@ -380,15 +420,22 @@ class RubyExecution(BaseExecution):
         if bdd:
             json_string = json.dumps(self.feature, default=Feature.obj_dict)
             # file.write(json_string)
-            r = requests.post("http://localhost:8000/createproject", json=json_string)
-            print(r.status_code, r.reason)
+            request = requests.post("http://localhost:8000/createproject", json=json_string)
+            print(request.status_code, request.reason)
         else:
-            json_string = json.dumps(self.it, default=It.obj_dict)
+            json_string = json.dumps(self.it_spec, default=It.obj_dict)
             # file.write(json_string)
-            r = requests.post("http://localhost:8000/covrel/update_spectrum", json=json_string)
-            print(r.status_code, r.reason)
+            request = requests.post("http://localhost:8000/covrel/update_spectrum",
+                                    json=json_string)
+            print(request.status_code, request.reason)
 
     def get_project_infos(self, path):
+        """
+            This method get target project main info
+            :param path: base path of the project
+            :return: project language, repository and name
+        """
+
         project = Project()
         project.language = "Ruby on Rails"
         project.repository = self.verify_git_repository(path)
@@ -396,7 +443,14 @@ class RubyExecution(BaseExecution):
 
         return project
 
-    def verify_git_repository(self, path):
+    @classmethod
+    def verify_git_repository(cls, path):
+        """
+            This method verify target project git repository
+            :param path: base path of the project
+            :return: project git repository url or None
+        """
+
         git_path = path + "/.git/"
         if os.path.exists(git_path):
             with open(git_path + 'config') as file:
@@ -406,6 +460,13 @@ class RubyExecution(BaseExecution):
                         return url[1]
         return None
 
-    def get_name_project(self, path):
+    @classmethod
+    def get_name_project(cls, path):
+        """
+            This method get target project name
+            :param path: base path of the project
+            :return: project name
+        """
+
         path = path.split('/')
         return path[-1]

@@ -1,7 +1,14 @@
+"""
+    Module which declares some classes as models
+"""
+
 from abc import ABC, abstractmethod
 
 
 class Project:
+    """
+        Project object
+    """
     def __init__(self):
         self.name = ""
         self.language = ""
@@ -17,10 +24,14 @@ class Project:
         return ''
 
     def obj_dict(self):
+        """ Return a dictionary or other mapping object. """
         return self.__dict__
 
 
 class Feature:
+    """
+        Feature object
+    """
 
     def __init__(self):
         self.path_name = ""
@@ -37,16 +48,18 @@ class Feature:
         return self.feature_name
 
     def obj_dict(self):
+        """ Return a dictionary or other mapping object. """
         return self.__dict__
 
 
 class Scenario(ABC):
+    """ Scenario object """
 
     def __init__(self):
-        steps = NotImplemented
-        scenario_title = NotImplemented
-        line = NotImplemented
-        executed_methods = NotImplemented
+        self.steps = NotImplemented
+        self.scenario_title = NotImplemented
+        self.line = NotImplemented
+        self.executed_methods = NotImplemented
 
 
     # @property
@@ -63,16 +76,19 @@ class Scenario(ABC):
 
     @abstractmethod
     def execute(self):
-        pass
+        """ Execute scenario """
 
     @abstractmethod
     def set_line(self):
-        pass
-
+        """
+            Set line
+        """
 
 class SimpleScenario(Scenario):
+    """ Simple scenario object """
 
     def __init__(self):
+        super().__init__()
         self.steps = []
         self.scenario_title = ""
         self.line = None
@@ -100,8 +116,10 @@ class SimpleScenario(Scenario):
 
 
 class ScenarioOutline(Scenario):
+    """ Scenario outline object """
 
     def __init__(self):
+        super().__init__()
         self.steps = []
         self.scenario_title = ""
         self.line = None
@@ -109,22 +127,21 @@ class ScenarioOutline(Scenario):
         self.scenario_iterations = []
 
     def execute(self):
-        pass
+        """ Execute a scenario outline """
 
     def set_line(self):
-        pass
+        """ Set the line of a scenario outline """
 
     def add(self):
-        pass
+        """ Add a scenario outline """
 
     def remove(self):
-        pass
-
-    def execute(self):
-        pass
+        """ Remove a scenario outline """
 
 
 class StepBdd:
+    """ BDD step object """
+
     def __init__(self):
         self.line = None
         self.keyword = ""
@@ -132,6 +149,7 @@ class StepBdd:
 
 
 class Method:
+    """ Method object """
 
     def __init__(self):
         self.line = None
@@ -152,4 +170,5 @@ class Method:
         return ''
 
     def obj_dict(self):
+        """ Return a dictionary or other mapping object. """
         return self.__dict__
