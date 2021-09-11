@@ -76,16 +76,19 @@ class TestRubyConfig:
     assert assertion_one == True
     assert assertion_two == False
 
-  # def test_check_gemfile(self):
-  #   fake_file_path = "fake/file/path"
-  #   content = RubyConfig().SIMPLECOV
-  #   with patch('trace_feature.core.ruby.ruby_config.open', mock_open()) as mocked_file:
-  #       RubyConfig().check_gemfile(fake_file_path)
+  def test_check_gemfile(self):
+    dir_path = base_path = os.path.dirname(__file__).split('ruby')[0]
+    dir_path = os.path.join(dir_path, "utils")
 
-  #       # assert if opened file on write mode 'w'
-  #       mocked_file.assert_called_once_with(fake_file_path + '/Gemfile', 'r+')
-  #       import pdb; pdb.set_trace()
+    content = RubyConfig().SIMPLECOV
+    RubyConfig().check_gemfile(dir_path)
 
-  #       # assert if write(content) was called from the file opened
-  #       # in another words, assert if the specific content was written in file
-  #       mocked_file().writelines.assert_called_once_with(content)
+    with open(dir_path + '/Gemfile', 'r+') as opened_file:
+      lines = opened_file.readlines()
+      assert content in lines
+
+      # clean test changes on file example
+      if content in lines:
+        del lines[57]
+        opened_file.seek(0)
+        opened_file.writelines(lines)
