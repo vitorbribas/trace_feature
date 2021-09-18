@@ -116,30 +116,6 @@ class SimpleScenario(Scenario):
         return ''
 
 
-class ScenarioOutline(Scenario):
-    """ Scenario outline object """
-
-    def __init__(self):
-        super().__init__()
-        self.steps = []
-        self.scenario_title = ""
-        self.line = None
-        self.examples = []
-        self.scenario_iterations = []
-
-    def execute(self):
-        """ Execute a scenario outline """
-
-    def set_line(self):
-        """ Set the line of a scenario outline """
-
-    def add(self):
-        """ Add a scenario outline """
-
-    def remove(self):
-        """ Remove a scenario outline """
-
-
 class StepBdd:
     """ BDD step object """
 
