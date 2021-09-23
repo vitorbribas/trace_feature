@@ -416,6 +416,7 @@ class RubyExecution(BaseExecution):
             request = requests.post("http://localhost:8000/covrel/update_spectrum",
                                     json=json_string)
             print(request.status_code, request.reason)
+        return request.status_code
 
     def get_project_infos(self, path):
         """
@@ -427,7 +428,7 @@ class RubyExecution(BaseExecution):
         project = Project()
         project.language = "Ruby on Rails"
         project.repository = self.verify_git_repository(path)
-        project.name = self.get_name_project(path)
+        project.name = self.get_project_name(path)
 
         return project
 
@@ -449,7 +450,7 @@ class RubyExecution(BaseExecution):
         return None
 
     @classmethod
-    def get_name_project(cls, path):
+    def get_project_name(cls, path):
         """
             This method get target project name
             :param path: base path of the project

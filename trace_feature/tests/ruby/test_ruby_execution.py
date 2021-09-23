@@ -3,6 +3,8 @@ import os
 import pytest
 
 from trace_feature.core.ruby.ruby_execution import RubyExecution
+from trace_feature.core.models import Feature
+from trace_feature.core.ruby.spec_models import It
 
 class TestRubyExecution:
 
@@ -20,6 +22,10 @@ class TestRubyExecution:
     base_path = os.path.dirname(__file__).split('ruby')[0]
     cov_result_file = os.path.join(base_path, "utils/methods/cov_result.json")
     return json.load(open(cov_result_file))
+
+  @pytest.fixture
+  def trace_feature_path(self):
+    return os.path.dirname(__file__).split('/trace_feature/tests')
 
   def test_is_method(self, ruby_execution):
     method_line = 'def full_name'
@@ -95,3 +101,33 @@ class TestRubyExecution:
       ret = ruby_execution.is_empty_class(opened_file)
 
       assert ret is False
+
+  def test_send_information(self, ruby_execution, requests_mock):
+    json_string = json.dumps(ruby_execution.feature, default=Feature.obj_dict)
+    requests_mock.post("http://localhost:8000/createproject", json=json_string)
+    resp = ruby_execution.send_information(True)
+    assert resp == 200
+
+    json_string = json.dumps(ruby_execution.it_spec, default=It.obj_dict)
+    requests_mock.post("http://localhost:8000/covrel/update_spectrum", json=json_string)
+    resp = ruby_execution.send_information(False)
+    assert resp == 200
+
+  def test_get_project_name(self, ruby_execution, trace_feature_path):
+    project_name = ruby_execution.get_project_name(trace_feature_path[0])
+
+    assert project_name == 'trace_feature'
+
+  def test_verify_git_repository(self, ruby_execution, trace_feature_path):
+    github_url = ruby_execution.verify_git_repository(trace_feature_path[0])
+    assert github_url == 'https://github.com/vitorbribas/trace_feature.git\n'
+
+    github_url = ruby_execution.verify_git_repository(trace_feature_path[1])
+    assert github_url == None
+
+  def test_get_project_infos(self, ruby_execution, trace_feature_path):
+    project = ruby_execution.get_project_infos(trace_feature_path[0])
+
+    assert project.name == 'trace_feature'
+    assert project.repository == 'https://github.com/vitorbribas/trace_feature.git\n'
+    assert project.language == 'Ruby on Rails'
