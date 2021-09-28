@@ -112,14 +112,14 @@ def get_methods_line(file_path, ruby):
     return methods
 
 
-def send_all_methods(project):
+def send_all_methods(project, url):
     """
         Send creation requests to all methods from a project
     """
 
     json_string = json.dumps(project, default=Project.obj_dict)
     # file.write(json_string)
-    request = requests.post("http://localhost:8000/createmethods", json=json_string)
+    request = requests.post(url + "/createmethods", json=json_string)
     print(request.status_code, request.reason)
 
 

@@ -30,7 +30,7 @@ class RubyExecution(BaseExecution):
         self.scenario = SimpleScenario()
         self.it_spec = It()
 
-    def execute_specs(self, path):
+    def execute_specs(self, path, url):
         """
             This method execute target project specs
             :param path: base path of the project
@@ -44,9 +44,9 @@ class RubyExecution(BaseExecution):
             self.class_definition_line = []
             self.it_spec = spec
             self.it_spec.project = self.project
-            self.execute_it(self.it_spec)
+            self.execute_it(self.it_spec, url)
 
-    def prepare_scenario(self, feature_path, scenario_line):
+    def prepare_scenario(self, feature_path, scenario_line, url):
         """
             This method prepares scenario for main ruby execution flow
             :param feature_path: a feature path
@@ -55,9 +55,9 @@ class RubyExecution(BaseExecution):
         """
         scenario = get_scenario(feature_path, scenario_line)
         self.execute_scenario(feature_path, scenario)
-        self.send_information(True)
+        self.send_information(True, url)
 
-    def execute_it(self, it_spec):
+    def execute_it(self, it_spec, url):
         """
             This method executes It
             :param it_spec: spec it test block
@@ -126,10 +126,10 @@ class RubyExecution(BaseExecution):
         print('Métodos: ', self.it_spec.executed_methods)
 
         # dado = input('Type Enter to continue..')
-        self.send_information(False)
+        self.send_information(False, url)
 
     # this method will execute all the features at this project
-    def execute(self, path):
+    def execute(self, path, url):
         # Cleaning data
         # self.class_definition_line = None
         # self.method_definition_lines = []
@@ -152,10 +152,10 @@ class RubyExecution(BaseExecution):
             for scenario in feature.scenarios:
                 self.execute_scenario(feature.path_name, scenario)
 
-            self.send_information(True)
+            self.send_information(True, url)
 
     # this method will execute only a specific feature
-    def execute_feature(self, project, feature_name):
+    def execute_feature(self, project, feature_name, url):
         """This method will execute only a specific feature
         :param feature_name: define the feature that will be executed
         :return: a json file with the trace.
@@ -169,7 +169,7 @@ class RubyExecution(BaseExecution):
         print('Execute Feature: ', feature.feature_name)
         for scenario in feature.scenarios:
             self.execute_scenario(feature.path_name, scenario)
-        self.send_information(True)
+        self.send_information(True, url)
     # this method will execute a specific scenario into a specific feature
     # filename: refer to the .feature file
     # scenario_ref: refer to the line or the name of a specific scenario
@@ -413,19 +413,19 @@ class RubyExecution(BaseExecution):
                 return False
         return True
 
-    def send_information(self, bdd):
+    def send_information(self, bdd, url):
         """This method will export all data to a json file.
         :return: json file.
         """
         if bdd:
             json_string = json.dumps(self.feature, default=Feature.obj_dict)
             # file.write(json_string)
-            request = requests.post("http://localhost:8000/createproject", json=json_string)
+            request = requests.post(url + "/createproject", json=json_string)
             print(request.status_code, request.reason)
         else:
             json_string = json.dumps(self.it_spec, default=It.obj_dict)
             # file.write(json_string)
-            request = requests.post("http://localhost:8000/covrel/update_spectrum",
+            request = requests.post(url + "/covrel/update_spectrum",
                                     json=json_string)
             print(request.status_code, request.reason)
 
