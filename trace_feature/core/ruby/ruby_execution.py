@@ -8,6 +8,7 @@ import linecache
 import subprocess
 import json
 import requests
+import time
 from trace_feature.core.ruby.spec_models import It
 
 from trace_feature.core.base_execution import BaseExecution
@@ -420,13 +421,23 @@ class RubyExecution(BaseExecution):
         if bdd:
             json_string = json.dumps(self.feature, default=Feature.obj_dict)
             # file.write(json_string)
-            request = requests.post(url + "/createproject", json=json_string)
+            try:
+                request = requests.post(url + "/createproject", json=json_string)
+            except:
+                print("Connection refused by the server... Waiting to try again")
+                time.sleep(5)
+                print("Trying again...")
             print(request.status_code, request.reason)
         else:
             json_string = json.dumps(self.it_spec, default=It.obj_dict)
             # file.write(json_string)
-            request = requests.post(url + "/covrel/update_spectrum",
+            try:
+                request = requests.post(url + "/covrel/update_spectrum",
                                     json=json_string)
+            except:
+                print("Connection refused by the server... Waiting to try again")
+                time.sleep(5)
+                print("Trying again...")
             print(request.status_code, request.reason)
 
     def get_project_infos(self, path):

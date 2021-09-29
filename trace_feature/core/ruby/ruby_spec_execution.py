@@ -19,7 +19,7 @@ def read_specs(path):
     """
 
     specs = []
-    for root, files in os.walk(path + '/spec/'):
+    for root, _, files in os.walk(path + '/spec/'):
         for file in files:
             if file.endswith(".rb"):
                 file_path = os.path.join(root, file)

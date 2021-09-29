@@ -9,6 +9,7 @@ import re
 import subprocess
 
 import requests
+import time
 
 from trace_feature.core.models import Method, Project
 from trace_feature.core.ruby.ruby_execution import RubyExecution
@@ -59,7 +60,7 @@ def read_methods(path):
 
     exclude = ['migrations', 'db', '.git', 'log', 'public', 'script', 'spec', 'tmp',
                'vendor', 'docker', 'db', 'coverage', 'config', 'bin', 'features']
-    for root, dirs, files in os.walk(path):
+    for root, _, files in os.walk(path):
         dirs[:] = [d for d in dirs if d not in exclude]
         for file in files:
             if file.endswith(".rb"):
@@ -119,7 +120,12 @@ def send_all_methods(project, url):
 
     json_string = json.dumps(project, default=Project.obj_dict)
     # file.write(json_string)
-    request = requests.post(url + "/createmethods", json=json_string)
+    try:
+        request = requests.post(url + "/createmethods", json=json_string)
+    except:
+        print("Connection refused by the server... Waiting to try again")
+        time.sleep(5)
+        print("Trying again...")
     print(request.status_code, request.reason)
 
 
