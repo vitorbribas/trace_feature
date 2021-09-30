@@ -10,6 +10,7 @@ import subprocess
 
 import requests
 import time
+import random
 
 from trace_feature.core.models import Method, Project
 from trace_feature.core.ruby.ruby_execution import RubyExecution
@@ -120,13 +121,17 @@ def send_all_methods(project, url):
 
     json_string = json.dumps(project, default=Project.obj_dict)
     # file.write(json_string)
-    try:
-        request = requests.post(url + "/createmethods", json=json_string)
-    except:
-        print("Connection refused by the server... Waiting to try again")
-        time.sleep(5)
-        print("Trying again...")
-    print(request.status_code, request.reason)
+    for retry in range(1, 4):
+        try:
+            request = requests.post(url + "/createmethods", json=json_string)
+            print(request.status_code, request.reason)
+            break
+        except:
+            print("Connection refused by the server... Waiting to try again")
+            time.sleep(3**retry + random.uniform(0,1))
+            print("Trying again for the " + str(retry) + "° time")
+    else:
+        print("Could not connect to server...exiting")
 
 
 def install_excellent_gem():

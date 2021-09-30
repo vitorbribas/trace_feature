@@ -9,6 +9,7 @@ import subprocess
 import json
 import requests
 import time
+import random
 from trace_feature.core.ruby.spec_models import It
 
 from trace_feature.core.base_execution import BaseExecution
@@ -421,24 +422,33 @@ class RubyExecution(BaseExecution):
         if bdd:
             json_string = json.dumps(self.feature, default=Feature.obj_dict)
             # file.write(json_string)
-            try:
-                request = requests.post(url + "/createproject", json=json_string)
-            except:
-                print("Connection refused by the server... Waiting to try again")
-                time.sleep(5)
-                print("Trying again...")
-            print(request.status_code, request.reason)
+            for retry in range(1, 4):
+                try:
+                    request = requests.post(url + "/createproject", json=json_string)
+                    print(request.status_code, request.reason)
+                    break
+                except:
+                    print("Connection refused by the server... Waiting to try again")
+                    time.sleep(3**retry + random.uniform(0,1))
+                    print("Trying again for the " + str(retry) + "° time")
+            else:
+                print("Could not connect to server...exiting")
         else:
             json_string = json.dumps(self.it_spec, default=It.obj_dict)
             # file.write(json_string)
-            try:
-                request = requests.post(url + "/covrel/update_spectrum",
-                                    json=json_string)
-            except:
-                print("Connection refused by the server... Waiting to try again")
-                time.sleep(5)
-                print("Trying again...")
-            print(request.status_code, request.reason)
+            for retry in range(1, 4):
+                try:
+                    request = requests.post(url + "/covrel/update_spectrum",
+                                        json=json_string)
+                    print(request.status_code, request.reason)
+                    break
+                except:
+                    print("Connection refused by the server... Waiting to try again")
+                    time.sleep(3**retry + random.uniform(0,1))
+                    print("Trying again for the " + str(retry) + "° time")
+            else:
+                print("Could not connect to server...exiting")
+
 
     def get_project_infos(self, path):
         """
