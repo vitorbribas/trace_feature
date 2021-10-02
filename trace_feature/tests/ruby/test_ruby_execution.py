@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import pytest
 
 from trace_feature.core.ruby.ruby_execution import RubyExecution
@@ -121,14 +122,14 @@ class TestRubyExecution:
 
   def test_verify_git_repository(self, ruby_execution, trace_feature_path):
     github_url = ruby_execution.verify_git_repository(trace_feature_path[0])
-    assert github_url == 'https://github.com/vitorbribas/trace_feature.git\n'
+    assert re.search(re.escape('https://github.com/'), github_url, flags=re.M) is not None
 
     github_url = ruby_execution.verify_git_repository(trace_feature_path[1])
-    assert github_url == None
+    assert github_url is None
 
   def test_get_project_infos(self, ruby_execution, trace_feature_path):
     project = ruby_execution.get_project_infos(trace_feature_path[0])
 
     assert project.name == 'trace_feature'
-    assert project.repository == 'https://github.com/vitorbribas/trace_feature.git\n'
     assert project.language == 'Ruby on Rails'
+    assert re.search(re.escape('https://github.com/'), project.repository, flags=re.M) is not None
