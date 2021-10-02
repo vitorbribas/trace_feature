@@ -70,10 +70,10 @@ class TestRubyExecution:
 
   def test_get_executed_method_definition_lines(self, ruby_execution, file_path, cov_result):
     with open(file_path) as opened_file:
-      p_key = "/home/vitorribas/Documentos/trace_feature/trace_feature/tests/utils/methods/user.rb"
+      key = file_path.split('methods/')[1]
       ruby_execution.get_executed_method_definition_lines(opened_file,
                                                  file_path,
-                                                 cov_result['RSpec']['coverage'][p_key])
+                                                 cov_result['RSpec']['coverage'][key])
 
       assert ruby_execution.method_definition_lines == [41, 60, 75, 82, 87, 94]
 
@@ -82,8 +82,9 @@ class TestRubyExecution:
 
     with open(file_path) as opened_file:
       executed_lines = []
+      key = file_path.split('methods/')[1]
       for n_line in lines:
-        ret = ruby_execution.was_executed(n_line - 1, file_path, cov_result['RSpec']['coverage'][file_path])
+        ret = ruby_execution.was_executed(n_line - 1, file_path, cov_result['RSpec']['coverage'][key])
         executed_lines.append(ret)
 
       assert executed_lines == [True, True, True, True, True, True, True, True]

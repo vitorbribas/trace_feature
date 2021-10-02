@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/home/vitorribas/Documentos/trace_feature/trace_feature/tests/utils/methods/user.rb": {
+      "user.rb": {
         "lines": [
           1,
           1,

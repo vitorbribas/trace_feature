@@ -62,11 +62,3 @@ class TestSimpleScenarioInstance:
 
   def test_str_print(self, scenario):
     assert scenario.__str__() == ''
-
-  # def test_execute(self, scenario, scenario_attributes):
-  #   scenario.execute()
-  #   assert scenario.scenario_title == scenario_attributes['scenario_title']
-
-  # def test_set_line(self, scenario, scenario_attributes):
-  #   scenario.set_line()
-  #   assert scenario.scenario_title == scenario_attributes['scenario_title']
