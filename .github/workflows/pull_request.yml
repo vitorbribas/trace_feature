@@ -18,4 +18,4 @@ jobs:
         pip install -r requirements.txt
         pip install .
     - name: Run tests
-      run: pytest trace_feature -v --cov --cov-report=html
+      run: pytest trace_feature/tests/ -v --cov
