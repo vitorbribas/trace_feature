@@ -9,11 +9,11 @@ class Project:
     """
         Project object
     """
-    def __init__(self):
-        self.name = ""
-        self.language = ""
-        self.repository = ""
-        self.methods = []
+    def __init__(self, name='', language='', repository='', methods=[]):
+        self.name = name
+        self.language = language
+        self.repository = repository
+        self.methods = methods
 
     def __str__(self):
         print('PROJETO:')
@@ -33,16 +33,17 @@ class Feature:
         Feature object
     """
 
-    def __init__(self):
-        self.path_name = ""
-        self.feature_name = ""
-        self.scenarios = []
-        self.language = ""
-        self.user_story = ""
-        self.tags = []
-        self.line = None
-        self.background = None
-        self.project = ""
+    def __init__(self, path_name="", feature_name="", scenarios=[], language="", user_story="",
+                 tags=[], line=None, background=None, project=""):
+        self.path_name = path_name
+        self.feature_name = feature_name
+        self.scenarios = scenarios
+        self.language = language
+        self.user_story = user_story
+        self.tags = tags
+        self.line = line
+        self.background = background
+        self.project = project
 
     def __str__(self):
         return self.feature_name
@@ -87,12 +88,12 @@ class Scenario(ABC):
 class SimpleScenario(Scenario):
     """ Simple scenario object """
 
-    def __init__(self):
+    def __init__(self, steps=[], scenario_title="", line=None, executed_methods=[]):
         super().__init__()
-        self.steps = []
-        self.scenario_title = ""
-        self.line = None
-        self.executed_methods = []
+        self.steps = steps
+        self.scenario_title = scenario_title
+        self.line = line
+        self.executed_methods = executed_methods
 
     def execute(self):
         pass
@@ -115,52 +116,29 @@ class SimpleScenario(Scenario):
         return ''
 
 
-class ScenarioOutline(Scenario):
-    """ Scenario outline object """
-
-    def __init__(self):
-        super().__init__()
-        self.steps = []
-        self.scenario_title = ""
-        self.line = None
-        self.examples = []
-        self.scenario_iterations = []
-
-    def execute(self):
-        """ Execute a scenario outline """
-
-    def set_line(self):
-        """ Set the line of a scenario outline """
-
-    def add(self):
-        """ Add a scenario outline """
-
-    def remove(self):
-        """ Remove a scenario outline """
-
-
 class StepBdd:
     """ BDD step object """
 
-    def __init__(self):
-        self.line = None
-        self.keyword = ""
-        self.text = ""
+    def __init__(self, line=None, keyword='', text=''):
+        self.line = line
+        self.keyword = keyword
+        self.text = text
 
 
 class Method:
     """ Method object """
 
-    def __init__(self):
-        self.line = None
-        self.method_id = ""
-        self.method_name = ""
-        self.class_name = ""
-        self.class_path = ""
-        self.abc_score = 0
-        self.complexity = 0
-        self.number_of_lines = 0
-        self.content = ""
+    def __init__(self, line=None, method_id="", method_name="", class_name="", class_path="",
+                 abc_score=0, complexity=0, number_of_lines=0, content=""):
+        self.line = line
+        self.method_id = method_id
+        self.method_name = method_name
+        self.class_name = class_name
+        self.class_path = class_path
+        self.abc_score = abc_score
+        self.complexity = complexity
+        self.number_of_lines = number_of_lines
+        self.content = content
 
     def __str__(self):
         print("METHOD:")

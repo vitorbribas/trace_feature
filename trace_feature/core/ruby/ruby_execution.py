@@ -221,7 +221,7 @@ class RubyExecution(BaseExecution):
                 return
 
             self.get_class_definition_line(file)
-            self.get_method_definition_lines(file, filename, cov_result)
+            self.get_executed_method_definition_lines(file, filename, cov_result)
             for method in self.method_definition_lines:
                 if method is not None:
                     new_method = Method()
@@ -252,7 +252,7 @@ class RubyExecution(BaseExecution):
                 return
 
             self.get_class_definition_line(file)
-            self.get_method_definition_lines(file, filename, cov_result)
+            self.get_executed_method_definition_lines(file, filename, cov_result)
             for method in self.method_definition_lines:
                 if method is not None:
                     new_method = Method()
@@ -333,12 +333,11 @@ class RubyExecution(BaseExecution):
                 return
         return
 
-    def get_method_definition_lines(self, file, filename, cov_result):
-        """This method get the line where a method is defined.
+    def get_executed_method_definition_lines(self, file, filename, cov_result):
+        """This method set the definition lines of methods which were executed by the scenario.
         :param file: The file that contains this method.
         :param cov_result: contains the result of simplecov.
         :param filename: contains the name of the analysed file.
-        :return: the number of the line.
         """
         file.seek(0)
         for line_number, line in enumerate(file, 1):
@@ -348,20 +347,9 @@ class RubyExecution(BaseExecution):
                     print('Get Method: ', line)
                     self.method_definition_lines.append(line_number)
 
-    def remove_not_executed_definitions(self, filename, cov_result):
-        """Remove all definitions that was not executed.
-        :param filename: the file that contains this definitions.
-        :param cov_result: json containing the simpleCov result.
-        :return: definitions removed.
-        """
-        # Methods that weren't executed aren't relevant, so we remove them here.
-        for line in self.method_definition_lines:
-            if not self.was_executed(line, filename, cov_result):
-                self.method_definition_lines.remove(line)
-
     @classmethod
     def was_executed(cls, def_line, filename, cov_result):
-        """Verify if a definitions was executed.
+        """Verify if a method definition was executed by the scenario.
         :param def_line: Line of a definition.
         :param filename: the file that contains this definition.
         :param cov_result: simpleCov json result.
@@ -395,10 +383,10 @@ class RubyExecution(BaseExecution):
             return True
         for line in range(def_line, end_line):
             if isinstance(cov_result, dict):
-                if cov_result['lines'][line]:
+                if cov_result['lines'][line] is not None:
                     return True
             elif isinstance(cov_result, list):
-                if cov_result[line]:
+                if cov_result[line] is not None:
                     return True
         return False
 
@@ -428,6 +416,7 @@ class RubyExecution(BaseExecution):
             request = requests.post("http://localhost:8000/covrel/update_spectrum",
                                     json=json_string)
             print(request.status_code, request.reason)
+        return request.status_code
 
     def get_project_infos(self, path):
         """
@@ -439,7 +428,7 @@ class RubyExecution(BaseExecution):
         project = Project()
         project.language = "Ruby on Rails"
         project.repository = self.verify_git_repository(path)
-        project.name = self.get_name_project(path)
+        project.name = self.get_project_name(path)
 
         return project
 
@@ -461,7 +450,7 @@ class RubyExecution(BaseExecution):
         return None
 
     @classmethod
-    def get_name_project(cls, path):
+    def get_project_name(cls, path):
         """
             This method get target project name
             :param path: base path of the project
