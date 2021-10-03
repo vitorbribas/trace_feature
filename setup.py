@@ -3,9 +3,11 @@ from setuptools import setup
 setup(
 
       name='trace_feature',
+      packages = 'trace_feature',
       version='0.1',
       description='A lib to trace bdd features.',
       url='https://github.com/BDD-OperationalProfile/trace_feature',
+      download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz'
       author='Rafael Fazzolino',
       author_email='fazzolino29@gmail.com',
       license='MIT',
