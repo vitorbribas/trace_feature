@@ -3,3 +3,15 @@ setup.cfg
 setup.py
 trace_feature/__init__.py
 trace_feature/trace_feature.py
+trace_feature/core/__init__.py
+trace_feature/core/base_config.py
+trace_feature/core/base_execution.py
+trace_feature/core/models.py
+trace_feature/core/features/__init__.py
+trace_feature/core/features/gherkin_parser.py
+trace_feature/core/ruby/__init__.py
+trace_feature/core/ruby/read_methods.py
+trace_feature/core/ruby/ruby_config.py
+trace_feature/core/ruby/ruby_execution.py
+trace_feature/core/ruby/ruby_spec_execution.py
+trace_feature/core/ruby/spec_models.py
