@@ -9,6 +9,8 @@ import re
 import subprocess
 
 import requests
+import time
+import random
 
 from trace_feature.core.models import Method, Project
 from trace_feature.core.ruby.ruby_execution import RubyExecution
@@ -60,7 +62,7 @@ def read_methods(path):
 
     exclude = ['migrations', 'db', '.git', 'log', 'public', 'script', 'spec', 'tmp',
                'vendor', 'docker', 'db', 'coverage', 'config', 'bin', 'features']
-    for root, dirs, files in os.walk(path):
+    for root, _, files in os.walk(path):
         dirs[:] = [d for d in dirs if d not in exclude]
         for file in files:
             if file.endswith(".rb"):
@@ -113,17 +115,24 @@ def get_methods_line(file_path, ruby):
     return methods
 
 
-def send_all_methods(project):
+def send_all_methods(project, url):
     """
         Send creation requests to all methods from a project
     """
 
     json_string = json.dumps(project, default=Project.obj_dict)
     # file.write(json_string)
-    request = requests.post("http://localhost:8000/createmethods", json=json_string)
-    print(request.status_code, request.reason)
-    return request.status_code
-
+    for retry in range(1, 4):
+        try:
+            request = requests.post(url + "/createmethods", json=json_string)
+            print(request.status_code, request.reason)
+            return request.status_code
+        except:
+            print("Connection refused by the server... Waiting to try again")
+            time.sleep(3**retry + random.uniform(0,1))
+            print("Trying again for the " + str(retry) + "° time")
+    else:
+        print("Could not connect to server...exiting")
 
 def install_excellent_gem():
     """

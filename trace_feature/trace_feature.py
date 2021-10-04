@@ -55,8 +55,15 @@ from trace_feature.core.ruby.ruby_config import RubyConfig
     is_flag=True,
     help='This option analyse all methods into this project.'
 )
+@click.option(
+    '--url',
+    '-u',
+    default='http://localhost:8000',
+    help='This option specify the target server url'
+)
 
-def trace(analyse, methods, spec, lista, project, feature, scenario):
+
+def trace(analyse, methods, spec, lista, project, feature, scenario, url):
     """
         This command ables you to run the traces generator's tool by running every BDD feature.
         None of the arguments are required.
@@ -76,7 +83,7 @@ def trace(analyse, methods, spec, lista, project, feature, scenario):
             project_methods = read_methods(project_path)
             install_excellent_gem()
             project_methods.methods = analyse_methods(project_methods.methods)
-            send_all_methods(project_methods)
+            send_all_methods(project_methods, url)
             for method in project_methods.methods:
                 print('Name: ', method.method_name)
                 print('Path: ', method.class_path)
@@ -100,7 +107,7 @@ def trace(analyse, methods, spec, lista, project, feature, scenario):
                     # install_excellent_gem()
                     # project_methods.methods = analyse_methods(project_methods.methods)
                     # send_all_methods(project_methods)
-                    execution.execute_specs(project_path)
+                    execution.execute_specs(project_path, url)
                 else:
                     # print('Read methods..')
                     # project_methods = read_methods(project_path)
@@ -109,10 +116,10 @@ def trace(analyse, methods, spec, lista, project, feature, scenario):
                     # send_all_methods(project_methods)
                     if feature and scenario:
                         print('feature and scenario')
-                        execution.prepare_scenario(feature, int(scenario))
+                        execution.prepare_scenario(feature, int(scenario), url)
                     elif feature != '':
                         print('feature')
-                        execution.execute_feature(project_path, feature)
+                        execution.execute_feature(project_path, feature, url)
                     else:
                         print('Full Execution!')
-                        execution.execute(project_path)
+                        execution.execute(project_path, url)
