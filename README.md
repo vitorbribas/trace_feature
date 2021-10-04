@@ -29,7 +29,7 @@ Para visualizar se você possui o virtualenv instalado, use:
 virtualenv --version
 ```
 
-Caso não tenha o pip instalado, use:   
+Caso não tenha o pip instalado, use:
 ```shell
 sudo pip3 install virtualenv
 ```
@@ -42,25 +42,42 @@ virtualenv -p python3 env
 
 
 ##### **4. Entre no Virtualenv**
-Entre na pasta que contém seu virtualenv e use:  
+Entre na pasta que contém seu virtualenv e use:
 
-```shell 
+```shell
 source env/bin/activate
+```
+
+##### **5. Instalação da ferramenta**
+
+Temos duas formas de executar o trace feature: **utilizando o pacote trace-feature** ou **clonando o repositório**.
+
+---
+
+**Utilizando o pacote trace-feature:**
+
+Após criar um _virtualenv_ execute o seguinte comando:
+
+```shell
+$ pip install trace-feature
 ```
 
 ---
 
-Após criar um _virtualenv_, navegue até o diretório `trace_feature` e execute o seguinte comando:   
+**Utilizando o projeto clonado localmente:**
+
+Após criar um _virtualenv_, navegue até o diretório `trace_feature` e execute o seguinte comando:
 
 ```shell
 $ pip install .
 ```
+ ---
 
 ### Execução do projeto:
 Para executar o projeto, use o comando:
 
 ```shell
-trace-feature -f [feature] -s [linha do cenário]
+trace-feature -f [feature] -s [linha do cenário] -u [url do servidor]
 ```
 
 Os argumentos são opcionais e não precisam ser especificados depois do comando. Vale lembrar também que para que o comando seja executado sem parâmetros, é necessário navegar até a pasta do projeto onde se deseja executar a ferramenta.
@@ -83,14 +100,14 @@ gem install excellent
 Então devemos incluir um arquivo de configuração onde vamos definir os dados que deverão ser obtidos pela gema Excellent. Para isso, crie um arquivo chamado .excellent.yml na pasta raíz do projeto analisado. Então inclua as seguintes linhas no arquivo:
 
 ```c
-AbcMetricMethodCheck: True	
+AbcMetricMethodCheck: True
 CyclomaticComplexityMethodCheck:
       threshold: 0
 MethodLineCountCheck:
       threshold: 0
 ```
 
-Feito isso, execute: 
+Feito isso, execute:
 
 ```shell
 trace-feature -m
