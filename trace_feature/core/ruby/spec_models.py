@@ -30,14 +30,15 @@
 class It:
     """ It object """
 
-    def __init__(self):
-        self.project = ""
-        self.key = ""
-        self.file = ""
-        self.description = ""
-        self.line = None
-        self.executed_methods = []
-        self.result = ""
+    def __init__(self, project="", key="", file="", description="", line=None, executed_methods=[],
+                result=""):
+        self.project = project
+        self.key = key
+        self.file = file
+        self.description = description
+        self.line = line
+        self.executed_methods = executed_methods
+        self.result = result
 
     def __str__(self):
         return self.description

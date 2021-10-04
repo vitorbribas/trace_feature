@@ -39,10 +39,7 @@ def get_its(file_path):
         for number_line, line in enumerate(file):
             if "it " in line and line[-3:] == "do\n":
                 line = line.split('it ')
-                if line[1][0] == ' ':
-                    line = line[1][1:-5]
-                else:
-                    line = line[1][1:-5]
+                line = line[1][1:-5]
                 spec = It()
                 spec.description = line
                 spec.line = number_line

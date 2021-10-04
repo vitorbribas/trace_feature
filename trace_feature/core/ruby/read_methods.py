@@ -36,8 +36,9 @@ def get_content(method, filename):
         # If we have a line that requires a matching 'end', we increase the
         # number of blocks.
 
-        if any(token in tokens for token in block_tokens):
-            remaining_blocks += 1
+        if tokens:
+            if any(token in tokens for token in block_tokens) or (tokens[0] in ['if', 'unless']):
+                remaining_blocks += 1
 
         # Likewise, if we found an 'end', we decrease the number of blocks.
         # When it gets to zero, that means we have reached the end of the
@@ -132,7 +133,7 @@ def send_all_methods(project, url):
             print("Trying again for the " + str(retry) + "° time")
     else:
         print("Could not connect to server...exiting")
-
+    return request.status_code
 
 def install_excellent_gem():
     """
@@ -166,7 +167,7 @@ def get_abc_score(result, method):
         Get ABC score from a method
     """
 
-    result = result.split('* Line  ')
+    result = re.split(r'\* Line  |\* Line ', result)
 
     for line in result:
         if method.class_name + "#" in line:
@@ -187,7 +188,7 @@ def get_cyclomatic_complexity(result, method):
         Get cyclomatic complexity from a method
     """
 
-    result = result.split('* Line  ')
+    result = re.split(r'\* Line  |\* Line ', result)
 
     for line in result:
         if method.class_name + "#" in line:
@@ -208,7 +209,7 @@ def get_number_of_lines(result, method):
         Get number of lines from a method
     """
 
-    result = result.split('* Line  ')
+    result = re.split(r'\* Line  |\* Line ', result)
 
     for line in result:
         if method.class_name + "#" in line:
@@ -218,7 +219,7 @@ def get_number_of_lines(result, method):
             if name == method.method_name:
                 number_of_lines = re.findall("has \\d+ lines.", line)
                 if len(number_of_lines) > 0:
-                    return float(re.findall("\\d+", number_of_lines[0])[0])
+                    return int(re.findall("\\d+", number_of_lines[0])[0])
     return 0
 
 

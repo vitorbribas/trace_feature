@@ -1,0 +1,366 @@
+{
+   "type":"GherkinDocument",
+   "feature":{
+      "type":"Feature",
+      "tags":[
+         {
+            "type":"Tag",
+            "location":{
+               "line":1,
+               "column":1
+            },
+            "name":"@javascript"
+         }
+      ],
+      "location":{
+         "line":2,
+         "column":1
+      },
+      "language":"en",
+      "keyword":"Feature",
+      "name":"Aspect navigation on the left menu",
+      "description":"    In order to filter posts visibility and post targeting\n    As a diaspora user\n    I want to use the aspect navigation menu",
+      "children":[
+         {
+            "type":"Background",
+            "location":{
+               "line":7,
+               "column":5
+            },
+            "keyword":"Background",
+            "name":"",
+            "steps":[
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":8,
+                     "column":7
+                  },
+                  "keyword":"Given ",
+                  "text":"a user with username \"bob\""
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":9,
+                     "column":7
+                  },
+                  "keyword":"And ",
+                  "text":"I sign in as \"bob@bob.bob\""
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":10,
+                     "column":7
+                  },
+                  "keyword":"And ",
+                  "text":"I have an aspect called \"Others\""
+               }
+            ]
+         },
+         {
+            "type":"Scenario",
+            "tags":[
+      
+            ],
+            "location":{
+               "line":12,
+               "column":5
+            },
+            "keyword":"Scenario",
+            "name":"All aspects are selected by default",
+            "steps":[
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":13,
+                     "column":7
+                  },
+                  "keyword":"When ",
+                  "text":"I go to the aspects page"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":14,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Besties\" aspect selected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":15,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Unicorns\" aspect selected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":16,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Others\" aspect selected"
+               }
+            ]
+         },
+         {
+            "type":"Scenario",
+            "tags":[
+               
+            ],
+            "location":{
+               "line":18,
+               "column":5
+            },
+            "keyword":"Scenario",
+            "name":"Aspects selection is remembered through site navigation",
+            "steps":[
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":19,
+                     "column":7
+                  },
+                  "keyword":"When ",
+                  "text":"I select only \"Besties\" aspect"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":20,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should be on the aspects page"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":22,
+                     "column":7
+                  },
+                  "keyword":"When ",
+                  "text":"I go to the stream page"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":23,
+                     "column":7
+                  },
+                  "keyword":"And ",
+                  "text":"I go to the aspects page"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":24,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Besties\" aspect selected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":25,
+                     "column":7
+                  },
+                  "keyword":"And ",
+                  "text":"I should see \"Unicorns\" aspect unselected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":26,
+                     "column":7
+                  },
+                  "keyword":"And ",
+                  "text":"I should see \"Others\" aspect unselected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":28,
+                     "column":7
+                  },
+                  "keyword":"When ",
+                  "text":"I go to the contacts page"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":29,
+                     "column":7
+                  },
+                  "keyword":"And ",
+                  "text":"I go to the aspects page"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":30,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Besties\" aspect selected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":31,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Unicorns\" aspect unselected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":32,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Others\" aspect unselected"
+               }
+            ]
+         },
+         {
+            "type":"Scenario",
+            "tags":[
+               
+            ],
+            "location":{
+               "line":34,
+               "column":5
+            },
+            "keyword":"Scenario",
+            "name":"Aspects selection can include one or more aspects",
+            "steps":[
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":35,
+                     "column":7
+                  },
+                  "keyword":"When ",
+                  "text":"I go to the aspects page"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":36,
+                     "column":7
+                  },
+                  "keyword":"And ",
+                  "text":"I select only \"Besties\" aspect"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":37,
+                     "column":7
+                  },
+                  "keyword":"And ",
+                  "text":"I select \"Unicorns\" aspect as well"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":38,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Besties\" aspect selected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":39,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Unicorns\" aspect selected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":40,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Others\" aspect unselected"
+               }
+            ]
+         },
+         {
+            "type":"Scenario",
+            "tags":[
+               
+            ],
+            "location":{
+               "line":42,
+               "column":5
+            },
+            "keyword":"Scenario",
+            "name":"Deselect all aspects",
+            "steps":[
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":43,
+                     "column":7
+                  },
+                  "keyword":"When ",
+                  "text":"I go to the aspects page"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":44,
+                     "column":7
+                  },
+                  "keyword":"And ",
+                  "text":"I follow \"Deselect all\""
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":45,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Besties\" aspect unselected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":46,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Unicorns\" aspect unselected"
+               },
+               {
+                  "type":"Step",
+                  "location":{
+                     "line":47,
+                     "column":7
+                  },
+                  "keyword":"Then ",
+                  "text":"I should see \"Others\" aspect unselected"
+               }
+            ]
+         }
+      ]
+   },
+   "comments":[
+      
+   ]
+}
