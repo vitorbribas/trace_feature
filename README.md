@@ -52,7 +52,9 @@ source env/bin/activate
 
 Temos duas formas de executar o trace feature: **utilizando o pacote trace-feature** ou **clonando o repositório**.
 
-Utilizando o pacote trace-feature:
+---
+
+**Utilizando o pacote trace-feature:**
 
 Após criar um _virtualenv_ execute o seguinte comando:
 
@@ -60,13 +62,16 @@ Após criar um _virtualenv_ execute o seguinte comando:
 $ pip install trace-feature
 ```
 
-Utilizando o projeto clonado localmente:
+---
+
+**Utilizando o projeto clonado localmente:**
 
 Após criar um _virtualenv_, navegue até o diretório `trace_feature` e execute o seguinte comando:
 
 ```shell
 $ pip install .
 ```
+ ---
 
 ### Execução do projeto:
 Para executar o projeto, use o comando:
