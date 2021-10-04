@@ -86,7 +86,7 @@ class TestReadMethodsInstance:
   def test_send_all_methods(self, requests_mock, project):
     json_string = json.dumps(project, default=Project.obj_dict)
     requests_mock.post("http://localhost:8000/createmethods", json=json_string)
-    resp = send_all_methods(project.methods)
+    resp = send_all_methods(project.methods, 'http://localhost:8000')
     assert resp == 200
 
   def test_abc_score(self, parsed_excellent_analysis):
