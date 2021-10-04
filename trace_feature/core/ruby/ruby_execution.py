@@ -414,7 +414,7 @@ class RubyExecution(BaseExecution):
                 try:
                     request = requests.post(url + "/createproject", json=json_string)
                     print(request.status_code, request.reason)
-                    break
+                    return request.status_code
                 except:
                     print("Connection refused by the server... Waiting to try again")
                     time.sleep(3**retry + random.uniform(0,1))
@@ -429,14 +429,13 @@ class RubyExecution(BaseExecution):
                     request = requests.post(url + "/covrel/update_spectrum",
                                         json=json_string)
                     print(request.status_code, request.reason)
-                    break
+                    return request.status_code
                 except:
                     print("Connection refused by the server... Waiting to try again")
                     time.sleep(3**retry + random.uniform(0,1))
                     print("Trying again for the " + str(retry) + "° time")
             else:
                 print("Could not connect to server...exiting")
-            return request.status_code
 
     def get_project_infos(self, path):
         """

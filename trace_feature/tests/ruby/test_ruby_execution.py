@@ -107,12 +107,12 @@ class TestRubyExecution:
   def test_send_information(self, ruby_execution, requests_mock):
     json_string = json.dumps(ruby_execution.feature, default=Feature.obj_dict)
     requests_mock.post("http://localhost:8000/createproject", json=json_string)
-    resp = ruby_execution.send_information(True)
+    resp = ruby_execution.send_information(True, 'http://localhost:8000')
     assert resp == 200
 
     json_string = json.dumps(ruby_execution.it_spec, default=It.obj_dict)
     requests_mock.post("http://localhost:8000/covrel/update_spectrum", json=json_string)
-    resp = ruby_execution.send_information(False)
+    resp = ruby_execution.send_information(False, 'http://localhost:8000')
     assert resp == 200
 
   def test_get_project_name(self, ruby_execution, trace_feature_path):

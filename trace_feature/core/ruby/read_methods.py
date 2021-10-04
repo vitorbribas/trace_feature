@@ -126,14 +126,13 @@ def send_all_methods(project, url):
         try:
             request = requests.post(url + "/createmethods", json=json_string)
             print(request.status_code, request.reason)
-            break
+            return request.status_code
         except:
             print("Connection refused by the server... Waiting to try again")
             time.sleep(3**retry + random.uniform(0,1))
             print("Trying again for the " + str(retry) + "° time")
     else:
         print("Could not connect to server...exiting")
-    return request.status_code
 
 def install_excellent_gem():
     """
