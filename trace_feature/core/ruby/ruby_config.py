@@ -20,15 +20,15 @@ class RubyConfig(BaseConfig):
                       '\'lib\', \'docker\', \'db\', \'coverage\', \'config\']\nend \n'
     RESULT_DIR = 'SimpleCov.coverage_dir \'coverage/cucumber\'\n'
 
-    def init(self):
-        pass
-
     def config(self):
+        """
+            This method checks the required configurations for Ruby target project
+        """
         project_path = self.get_local_path()
         if self.is_rails_project(project_path):
             print('Rails project!')
             if (self.verify_requirements_on_gemfile(self, project_path) and
-                self.verify_requirements_on_env_file(self, project_path)):
+                    self.verify_requirements_on_env_file(self, project_path)):
                 return True
             self.check_gemfile(project_path)
             subprocess.call(['bundle', 'install'], cwd=project_path)
@@ -51,6 +51,9 @@ class RubyConfig(BaseConfig):
 
     @classmethod
     def verify_requirements_on_gemfile(cls, self, path):
+        """
+            This method verifies if SimpleCov Json gem is present on project requirements
+        """
         with open(path+"/Gemfile", 'r') as file:
             if re.search(re.escape(self.SIMPLECOV), file.read(), flags=re.M) is None:
                 return False
@@ -58,16 +61,24 @@ class RubyConfig(BaseConfig):
 
     @classmethod
     def verify_requirements_on_env_file(cls, self, path):
+        """
+            This method verifies if some SimpleCov requirements are present on env.rb target
+            project file
+        """
         with open(path + "/features/support/env.rb", 'r') as file:
             text_file = file.read()
-            if (re.search(re.escape(self.REQSIMCOV),       text_file, flags=re.M) is None or
-                re.search(re.escape(self.START),           text_file, flags=re.M) is None or
-                re.search(re.escape(self.RESULT_DIR),      text_file, flags=re.M) is None or
-                re.search(re.escape(self.EXCLUDE_FOLDERS), text_file, flags=re.M) is None):
+            if (re.search(re.escape(self.REQSIMCOV), text_file, flags=re.M) is None or
+                    re.search(re.escape(self.START), text_file, flags=re.M) is None or
+                    re.search(re.escape(self.RESULT_DIR), text_file, flags=re.M) is None or
+                    re.search(re.escape(self.EXCLUDE_FOLDERS), text_file, flags=re.M) is None):
                 return False
             return True
 
     def check_gemfile(self, path):
+        """
+            This method verifies if SimpleCov Json gem is present on the test group of the Gemfile
+            file. If it's not present, insert it there
+        """
         output = []
         with open(path + '/Gemfile', 'r+') as file:
             has_simplecov = False
@@ -91,6 +102,10 @@ class RubyConfig(BaseConfig):
 
     @classmethod
     def is_test_group(cls, tokens):
+        """
+            This method verifies if the current Gemfile line is the beginning of the development
+            and test group
+        """
         if len(tokens) > 1:
             if tokens[0] == 'group' and tokens[1] == ':development,' and tokens[2] == ':test':
                 return True
@@ -98,12 +113,19 @@ class RubyConfig(BaseConfig):
 
     @classmethod
     def simplecov_exists(cls, tokens):
+        """
+            This method verifies if SimpleCov Json gem is present on project requirements
+        """
         if len(tokens) > 1:
             if tokens[0] == 'gem' and tokens[1] == '\'simplecov-json\'':
                 return True
         return False
 
     def check_environment(self, path):
+        """
+            This method verifies if some SimpleCov requirements are present on env.rb target
+            project file. If they are not present, insert them
+        """
         output = []
         with open(path + '/features/support/env.rb', 'r+') as file:
             has_req = False
@@ -141,6 +163,9 @@ class RubyConfig(BaseConfig):
 
     @classmethod
     def req_simple_cov(cls, tokens):
+        """
+            This method verifies if the current line being analized is a SimplecovJson require call
+        """
         if len(tokens) > 1:
             if tokens[0] == 'require' and tokens[1] == '\'simplecov-json\'':
                 return True
@@ -148,6 +173,10 @@ class RubyConfig(BaseConfig):
 
     @classmethod
     def simple_cov_start(cls, tokens):
+        """
+            This method verifies if the current line being analized is a SimplecovJson beggining
+            block
+        """
         if len(tokens) > 1:
             if tokens[0] == 'SimpleCov.start' and tokens[1] == '\'rails\'':
                 return True
@@ -155,6 +184,10 @@ class RubyConfig(BaseConfig):
 
     @classmethod
     def simple_cov_exclude(cls, tokens):
+        """
+            This method verifies if the current line being analized in a SimplecovJson statement
+            adding a filter block
+        """
         if len(tokens) > 1:
             if tokens[0] == 'add_filter':
                 return True
@@ -162,6 +195,10 @@ class RubyConfig(BaseConfig):
 
     @classmethod
     def result_dir(cls, tokens):
+        """
+            This method verifies if the current line being analized is a SimplecovJson statement
+            for defining a result dir for coverage result
+        """
         if len(tokens) > 1:
             if tokens[0] == 'SimpleCov.coverage_dir' and tokens[1] == '\'coverage/cucumber\'':
                 return True
