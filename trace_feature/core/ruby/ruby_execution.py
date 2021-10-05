@@ -7,11 +7,11 @@ import os
 import linecache
 import subprocess
 import json
-import requests
 import time
 import random
-from trace_feature.core.ruby.spec_models import It
+import requests
 
+from trace_feature.core.ruby.spec_models import It
 from trace_feature.core.base_execution import BaseExecution
 from trace_feature.core.features.gherkin_parser import read_all_bdds, get_scenario, read_feature
 from trace_feature.core.models import Feature, Method, SimpleScenario, Project
@@ -417,8 +417,9 @@ class RubyExecution(BaseExecution):
                     return request.status_code
                 except:
                     print("Connection refused by the server... Waiting to try again")
-                    time.sleep(3**retry + random.uniform(0,1))
+                    time.sleep(3**retry + random.uniform(0, 1))
                     print("Trying again for the " + str(retry) + "° time")
+                break
             else:
                 print("Could not connect to server...exiting")
         else:
@@ -427,13 +428,14 @@ class RubyExecution(BaseExecution):
             for retry in range(1, 4):
                 try:
                     request = requests.post(url + "/covrel/update_spectrum",
-                                        json=json_string)
+                                            json=json_string)
                     print(request.status_code, request.reason)
                     return request.status_code
                 except:
                     print("Connection refused by the server... Waiting to try again")
-                    time.sleep(3**retry + random.uniform(0,1))
+                    time.sleep(3**retry + random.uniform(0, 1))
                     print("Trying again for the " + str(retry) + "° time")
+                break
             else:
                 print("Could not connect to server...exiting")
 
