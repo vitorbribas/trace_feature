@@ -8,9 +8,9 @@ import os
 import re
 import subprocess
 
-import requests
 import time
 import random
+import requests
 
 from trace_feature.core.models import Method, Project
 from trace_feature.core.ruby.ruby_execution import RubyExecution
@@ -62,7 +62,7 @@ def read_methods(path):
 
     exclude = ['migrations', 'db', '.git', 'log', 'public', 'script', 'spec', 'tmp',
                'vendor', 'docker', 'db', 'coverage', 'config', 'bin', 'features']
-    for root, _, files in os.walk(path):
+    for root, dirs, files in os.walk(path):
         dirs[:] = [d for d in dirs if d not in exclude]
         for file in files:
             if file.endswith(".rb"):
@@ -129,8 +129,9 @@ def send_all_methods(project, url):
             return request.status_code
         except:
             print("Connection refused by the server... Waiting to try again")
-            time.sleep(3**retry + random.uniform(0,1))
+            time.sleep(3**retry + random.uniform(0, 1))
             print("Trying again for the " + str(retry) + "° time")
+        break
     else:
         print("Could not connect to server...exiting")
 

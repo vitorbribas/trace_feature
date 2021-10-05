@@ -31,7 +31,7 @@ class It:
     """ It object """
 
     def __init__(self, project="", key="", file="", description="", line=None, executed_methods=[],
-                result=""):
+                 result=""):
         self.project = project
         self.key = key
         self.file = file

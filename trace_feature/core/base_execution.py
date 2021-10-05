@@ -11,14 +11,14 @@ class BaseExecution(ABC):
     """
 
     @abstractmethod
-    def execute(self, path):
+    def execute(self, path, url):
         """
             BaseExecution execute self
         """
 
     # this method will execute only a specific feature
     @abstractmethod
-    def execute_feature(self, project, feature_name):
+    def execute_feature(self, project, feature_name, url):
         """
             BaseExecution execute for specific feature
         """
