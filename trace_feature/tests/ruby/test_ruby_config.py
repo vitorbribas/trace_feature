@@ -181,3 +181,44 @@ class TestRubyConfig:
         opened_file.seek(0)
         opened_file.truncate()
         opened_file.write('\n'.join(lines))
+
+  def test_config(self, config, gemfile_path, mocker):
+    mocker.patch(
+      'trace_feature.core.ruby.ruby_execution.RubyExecution.execute_command',
+      return_value=0
+    )
+
+    mocker.patch(
+      'trace_feature.core.ruby.ruby_config.RubyConfig.check_gemfile'
+    )
+
+    mocker.patch(
+      'trace_feature.core.ruby.ruby_config.RubyConfig.check_environment',
+      return_value=True
+    )
+
+    ret = config.config(gemfile_path)
+
+    assert ret == True
+
+  def test_existing_config(self, config, gemfile_path, mocker):
+    mocker.patch(
+      'trace_feature.core.ruby.ruby_config.RubyConfig.verify_requirements_on_gemfile'
+    )
+
+    mocker.patch(
+      'trace_feature.core.ruby.ruby_config.RubyConfig.verify_requirements_on_env_file',
+      return_value=True
+    )
+
+    ret = config.config(gemfile_path)
+
+    assert ret == True
+
+  def test_not_rails_project_config(self, config, gemfile_path, mocker):
+
+    ret = config.config('')
+
+    assert ret == False
+
+

@@ -62,3 +62,9 @@ class TestSimpleScenarioInstance:
 
   def test_str_print(self, scenario):
     assert scenario.__str__() == ''
+
+  def test_execute(self, scenario):
+    assert scenario.execute() == None
+
+  def test_set_line(self, scenario):
+    assert scenario.set_line() == None

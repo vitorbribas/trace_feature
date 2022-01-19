@@ -4,10 +4,7 @@ import json
 import linecache
 from types import SimpleNamespace
 from trace_feature.core.models import Project, Method
-from trace_feature.core.ruby.read_methods import (get_methods_line, install_excellent_gem,
-                                                  send_all_methods, get_abc_score,
-                                                  get_cyclomatic_complexity, get_number_of_lines,
-                                                  get_content)
+from trace_feature.core.ruby.read_methods import *
 from trace_feature.core.ruby.ruby_execution import RubyExecution
 
 
@@ -119,3 +116,52 @@ class TestReadMethodsInstance:
         line_number += 1
 
       assert method_content == content
+
+  def test_install_excellent_gem(self, mocker):
+    mocker.patch(
+      'trace_feature.core.ruby.ruby_execution.RubyExecution.execute_command',
+      return_value=0
+    )
+
+    actual = install_excellent_gem()
+    assert actual is not None
+
+  def test_execute_excellent_gem(self, mocker, methods_file_path):
+    mocker.patch(
+      'trace_feature.core.ruby.ruby_execution.RubyExecution.execute_command',
+      return_value=0
+    )
+
+    actual = execute_excellent_gem(methods_file_path)
+    assert actual is not None
+
+  def test_read_methods(self, methods_file_path):
+    project = read_methods(methods_file_path.split("/user.rb")[0])
+    assert len(project.methods) != 0
+
+  def test_analyse_methods(self, mocker, methods_file_path):
+    project = read_methods(methods_file_path.split("/user.rb")[0])
+
+    mocker.patch(
+      'trace_feature.core.ruby.ruby_execution.RubyExecution.execute_command',
+      return_value=0
+    )
+
+    mocker.patch(
+      'trace_feature.core.ruby.read_methods.get_abc_score',
+      return_value="* Line  59: ExController#deletar_aluno has abc score of 26.019223662515376"
+    )
+
+    mocker.patch(
+      'trace_feature.core.ruby.read_methods.get_cyclomatic_complexity',
+      return_value="* Line 216: ExController#carregar_disciplinas has cyclomatic complexity of 2"
+    )
+
+    mocker.patch(
+      'trace_feature.core.ruby.read_methods.get_number_of_lines',
+      return_value="* Line 245: ExController#web_scraper has 12 lines"
+    )
+
+
+    methods = analyse_methods(project.methods)
+    assert methods[0].abc_score is not 0

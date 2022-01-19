@@ -11,7 +11,7 @@ class BaseExecution(ABC):
     """
 
     @abstractmethod
-    def execute(self, path, url):
+    def execute_all_features(self, path, url):
         """
             BaseExecution execute self
         """

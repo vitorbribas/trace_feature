@@ -7,6 +7,7 @@ import re
 import subprocess
 
 from trace_feature.core.base_config import BaseConfig
+from trace_feature.core.ruby.ruby_execution import RubyExecution
 
 class RubyConfig(BaseConfig):
     """
@@ -20,19 +21,18 @@ class RubyConfig(BaseConfig):
                       '\'lib\', \'docker\', \'db\', \'coverage\', \'config\']\nend \n'
     RESULT_DIR = 'SimpleCov.coverage_dir \'coverage/cucumber\'\n'
 
-    def config(self):
+    def config(self, path="."):
         """
             This method checks the required configurations for Ruby target project
         """
-        project_path = self.get_local_path()
-        if self.is_rails_project(project_path):
+        if self.is_rails_project(path):
             print('Rails project!')
-            if (self.verify_requirements_on_gemfile(self, project_path) and
-                    self.verify_requirements_on_env_file(self, project_path)):
+            if (self.verify_requirements_on_gemfile(self, path) and
+                    self.verify_requirements_on_env_file(self, path)):
                 return True
-            self.check_gemfile(project_path)
-            subprocess.call(['bundle', 'install'], cwd=project_path)
-            return self.check_environment(project_path)
+            self.check_gemfile(path)
+            RubyExecution().execute_command("bundle install")
+            return self.check_environment(path)
         return False
 
     @classmethod

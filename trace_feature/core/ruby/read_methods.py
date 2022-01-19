@@ -140,12 +140,9 @@ def install_excellent_gem():
         Install excellent gem on target project
     """
 
-    process = subprocess.Popen(["gem", "install", "excellent"], stdout=subprocess.PIPE)
-
-    # Catches Tuple first element and decode it
-    test_message = process.communicate()[0]
-    test_message = test_message.decode('utf-8')
-    # print(test_message)
+    ruby_exec = RubyExecution()
+    command_return = ruby_exec.execute_command("gem install excellent")
+    return command_return
 
 
 def execute_excellent_gem(file):
@@ -153,13 +150,9 @@ def execute_excellent_gem(file):
         Execute excellent gem on target project
     """
 
-    process = subprocess.Popen(["excellent", file], stdout=subprocess.PIPE)
-
-    # Catches Tuple first element and decode it
-    test_message = process.communicate()[0]
-    test_message = test_message.decode('utf-8')
-    print(test_message)
-    return test_message
+    ruby_exec = RubyExecution()
+    command_return = ruby_exec.execute_command("excellent" + file)
+    return command_return
 
 
 def get_abc_score(result, method):

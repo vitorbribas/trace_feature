@@ -122,4 +122,4 @@ def trace(analyse, methods, spec, lista, project, feature, scenario, url):
                         execution.execute_feature(project_path, feature, url)
                     else:
                         print('Full Execution!')
-                        execution.execute(project_path, url)
+                        execution.execute_all_features(project_path, url)

@@ -67,58 +67,15 @@ class RubyExecution(BaseExecution):
         """
 
         print('Executing It: ', it_spec.description)
-        # signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-        process = subprocess.Popen(["bundle", "exec", "rspec",
-                                    it_spec.file + ":" + str(it_spec.line)],
-                                   stdout=subprocess.PIPE)
 
-        # Catches Tuple first element and decode it_spec
-        test_message = process.communicate()[0]
-        test_message = test_message.decode('utf-8')
+        self.execute_command("bundle exec rspec" + it_spec.file + ":" + str(it_spec.line))
 
-        print(test_message)
-        # Parses test_message to get number of examples, peding and failures
-        # using regex lib re
-
-        # test_examples = re.findall(r"[0-9]+ examples", test_message)
-        # test_pended = re.findall(r"[0-9]+ pending", test_message)
-        # test_failed = re.findall(r"[0-9]+ failures", test_message)
-        #
-        # print('Olha: ')
-        # print('test_examples: ', test_examples)
-        # print('test_pended', test_pended)
-        # print('test_failed', test_failed)
-        #
-        # # Then print all together
-        # if test_pended:
-        #     print("\n" + test_pended[0] + " tests \n")
-        # else:
-        #     print("There are no pending tests. \n")
-        #
-        # if test_failed[0] != "0":
-        #     print(test_failed[0] + " tests in this it_spec block \n")
-        # else:
-        #     print("There are no failed tests. \n")
-        #
-        #
-        # # And make a comparison to see if there are no failed nor
-        # # pended tests
-        # if not (len(test_failed) and len(test_pended)):
-        #     test_success = test_examples[0].split('examples')[0]
-        #     print(test_success + "tests successed \n")
-
-        # try:
-        #     process.stdout.close()
-        # except BrokenPipeError:
-        #     pass
-        # process.wait()
-        # TO DO: analyse this print
         with open('coverage/cucumber/.resultset.json') as opened_file:
             json_data = json.load(opened_file)
             for k in json_data:
                 for i in json_data[k]['coverage']:
                     if i:
-                        self.run_file_with_it(i, json_data[k]['coverage'][i], it_spec)
+                        self.run_file(i, json_data[k]['coverage'][i], it_spec)
         self.it_spec.project = self.project
         self.it_spec.key = it_spec.file + str(it_spec.line)
         print('Number of executed Methods: ', str(len(it_spec.executed_methods)))
@@ -131,30 +88,14 @@ class RubyExecution(BaseExecution):
         self.send_information(False, url)
 
     # this method will execute all the features at this project
-    def execute(self, path, url):
-        # Cleaning data
-        # self.class_definition_line = None
-        # self.method_definition_lines = []
-        # self.project = Project()
-        # self.feature = Feature()
-        # self.scenario = SimpleScenario()
-
+    def execute_all_features(self, path, url):
         self.project = self.get_project_infos(path)
 
         # Getting all features from this project
         features = read_all_bdds(path)
 
         for feature in features:
-            self.method_definition_lines = []
-            self.class_definition_line = None
-            feature.project = self.project
-            self.feature = feature
-
-            print('Execute Feature: ', feature.feature_name)
-            for scenario in feature.scenarios:
-                self.execute_scenario(feature.path_name, scenario)
-
-            self.send_information(True, url)
+            self.execute_feature(path, feature.path_name, url)
 
     # this method will execute only a specific feature
     def execute_feature(self, project, feature_name, url):
@@ -162,43 +103,36 @@ class RubyExecution(BaseExecution):
         :param feature_name: define the feature that will be executed
         :return: a json file with the trace.
         """
-        self.project = self.get_project_infos(project)
         feature = read_feature(feature_name)
+
+        self.project = self.get_project_infos(project)
         self.method_definition_lines = []
         self.class_definition_line = None
         feature.project = self.project
         self.feature = feature
+
         print('Execute Feature: ', feature.feature_name)
         for scenario in feature.scenarios:
             self.execute_scenario(feature.path_name, scenario)
+
         self.send_information(True, url)
+
+
     # this method will execute a specific scenario into a specific feature
     # filename: refer to the .feature file
     # scenario_ref: refer to the line or the name of a specific scenario
-
-
     def execute_scenario(self, feature_name, scenario):
         """This Method will execute only a specific scenario
         :param feature_name: define the feature that contains this scenario
         :param scenario: contains a key to get a scenario
         :return: a json file with the trace.
         """
-        # print(subprocess.check_output("RAILS_ENV=development"))
-        # os.environ['RAILS_ENV'] = "test"
         print('Executing Scenario: ', scenario.scenario_title)
-        # signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-        process = subprocess.Popen(["bundle", "-v"], stdout=subprocess.PIPE)
-        print(process.communicate())
-        process = subprocess.Popen(["bundle", "exec", "rake", "cucumber", "FEATURE=" +
-                                    feature_name + ":" + str(scenario.line)],
-                                   stdout=subprocess.PIPE)
-        print(process.communicate())
-        # try:
-        #     process.stdout.close()
-        # except BrokenPipeError:
-        #     pass
-        # process.wait()
-        # TO DO: analyse this print
+
+        self.execute_command("bundle -v")
+        self.execute_command("bundle exec rake cucumber FEATURE=" + feature_name + ":" +
+                             str(scenario.line))
+
         with open('coverage/cucumber/.resultset.json') as opened_file:
             json_data = json.load(opened_file)
             for k in json_data:
@@ -210,42 +144,12 @@ class RubyExecution(BaseExecution):
                             self.run_file(i, json_data[k]['coverage'][i], scenario)
         print('Number of executed Methods: ', str(len(scenario.executed_methods)))
 
-    def run_file_with_it(self, filename, cov_result, it_spec):
+
+    def run_file(self, filename, cov_result, scenario_or_it_spec):
         """This method will execute a specific feature file
         :param filename: the  name of the feature file
         :param cov_result: a array containing the result os simpleCov for some method
-        :param scenario: contains the line where the scenario starts
-        :return: Instantiate the Methods executed.
-        """
-        self.method_definition_lines = []
-        with open(filename) as file:
-            if self.is_empty_class(file):
-                return
-
-            self.get_class_definition_line(file)
-            self.get_executed_method_definition_lines(file, filename, cov_result)
-            for method in self.method_definition_lines:
-                if method is not None:
-                    new_method = Method()
-                    new_method.method_name = self.get_method_or_class_name(method, filename)
-                    if self.class_definition_line is None:
-                        new_method.class_name = 'None'
-                    else:
-                        new_method.class_name = self.get_method_or_class_name(
-                            self.class_definition_line,
-                            filename
-                        )
-                    new_method.class_path = filename
-                    new_method.method_id = filename + self.get_method_or_class_name(
-                        method, filename
-                    ) + str(method)
-                    it_spec.executed_methods.append(new_method)
-
-    def run_file(self, filename, cov_result, scenario):
-        """This method will execute a specific feature file
-        :param filename: the  name of the feature file
-        :param cov_result: a array containing the result os simpleCov for some method
-        :param scenario: contains the executed scenario
+        :param scenario_or_it_spec: contains the executed scenario or it spec
         :return: Instantiate the Methods executed.
         """
         self.method_definition_lines = []
@@ -269,7 +173,7 @@ class RubyExecution(BaseExecution):
                     new_method.method_id = filename + self.get_method_or_class_name(
                         method, filename) + str(method)
 
-                    scenario.executed_methods.append(new_method)
+                    scenario_or_it_spec.executed_methods.append(new_method)
 
     @classmethod
     def is_method(cls, line):
@@ -438,6 +342,15 @@ class RubyExecution(BaseExecution):
                 break
             else:
                 print("Could not connect to server...exiting")
+
+    def execute_command(command):
+        process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+
+        test_message = process.communicate()[0]
+        test_message = test_message.decode('utf-8')
+        print(test_message)
+
+        return test_message
 
     def get_project_infos(self, path):
         """
