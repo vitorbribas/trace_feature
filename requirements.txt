@@ -13,3 +13,6 @@ pytest-cov==2.12.1
 pytest-mock==3.6.1
 requests-mock==1.9.3
 mock==4.0.3
+radon==5.1.0
+python-abc==0.1.0
+pydeps==1.10.14
