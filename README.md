@@ -71,6 +71,12 @@ Após criar um _virtualenv_, navegue até o diretório `trace_feature` e execute
 ```shell
 $ pip install .
 ```
+
+Instale outras dependências do projeto:
+
+```shell
+$ pip install -r requirements.txt
+```
  ---
 
 ### Execução do projeto:
