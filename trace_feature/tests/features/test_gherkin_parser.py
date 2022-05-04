@@ -3,7 +3,7 @@ import json
 import os
 from gherkin.parser import Parser
 from gherkin.token_scanner import TokenScanner
-from trace_feature.core.models import Feature
+from trace_feature.core.models.feature import Feature
 from trace_feature.core.features.gherkin_parser import *
 
 class TestGherkinParser:

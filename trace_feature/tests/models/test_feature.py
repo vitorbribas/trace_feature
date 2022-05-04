@@ -1,7 +1,7 @@
 import pytest
 import json
 import os
-from trace_feature.core.models import Feature
+from trace_feature.core.models.feature import Feature
 
 class TestFeatureInstance:
   @pytest.fixture

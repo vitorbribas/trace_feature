@@ -12,7 +12,8 @@ import time
 import random
 import requests
 
-from trace_feature.core.models import Method, Project
+from trace_feature.core.models.method import Method
+from trace_feature.core.models.project import Project
 from trace_feature.core.ruby.ruby_execution import RubyExecution
 
 

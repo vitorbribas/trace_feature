@@ -3,7 +3,8 @@ import os
 import json
 import linecache
 from types import SimpleNamespace
-from trace_feature.core.models import Project, Method
+from trace_feature.core.models.project import Project
+from trace_feature.core.models.method import Method
 from trace_feature.core.ruby.read_methods import *
 from trace_feature.core.ruby.ruby_execution import RubyExecution
 

@@ -1,5 +1,5 @@
 import pytest
-from trace_feature.core.models import Project
+from trace_feature.core.models.project import Project
 
 class TestProjectInstance:
   @pytest.fixture

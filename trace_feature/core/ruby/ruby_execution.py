@@ -14,7 +14,10 @@ import requests
 from trace_feature.core.ruby.spec_models import It
 from trace_feature.core.base_execution import BaseExecution
 from trace_feature.core.features.gherkin_parser import read_all_bdds, get_scenario, read_feature
-from trace_feature.core.models import Feature, Method, SimpleScenario, Project
+from trace_feature.core.models.feature import Feature
+from trace_feature.core.models.method import Method
+from trace_feature.core.models.simple_scenario import SimpleScenario
+from trace_feature.core.models.project import Project
 
 from trace_feature.core.ruby.ruby_spec_execution import read_specs
 

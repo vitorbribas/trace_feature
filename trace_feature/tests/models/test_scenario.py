@@ -1,7 +1,8 @@
 import pytest
 import json
 import os
-from trace_feature.core.models import SimpleScenario, StepBdd
+from trace_feature.core.models.simple_scenario import SimpleScenario
+from trace_feature.core.models.step_bdd import StepBdd
 
 class TestSimpleScenarioInstance:
   @pytest.fixture

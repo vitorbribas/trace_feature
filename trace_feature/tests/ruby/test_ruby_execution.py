@@ -4,7 +4,7 @@ import re
 import pytest
 
 from trace_feature.core.ruby.ruby_execution import RubyExecution
-from trace_feature.core.models import Feature
+from trace_feature.core.models.feature import Feature
 from trace_feature.core.ruby.spec_models import It
 
 class TestRubyExecution:

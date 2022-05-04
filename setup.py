@@ -9,7 +9,8 @@ setup(
       author='Rafael Fazzolino',
       author_email='fazzolino29@gmail.com',
       license='MIT',
-      packages=['trace_feature', 'trace_feature.core', 'trace_feature.core.ruby', 'trace_feature.core.features'],
+      packages=['trace_feature', 'trace_feature.core', 'trace_feature.core.ruby', 'trace_feature.core.features',
+            'trace_feature.core.models'],
       zip_safe=False,
       py_modules=['trace_feature'],
       install_requires=[

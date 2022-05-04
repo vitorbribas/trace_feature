@@ -5,7 +5,9 @@
 import os
 from gherkin.parser import Parser
 from gherkin.token_scanner import TokenScanner
-from trace_feature.core.models import Feature, SimpleScenario, StepBdd
+from trace_feature.core.models.feature import Feature
+from trace_feature.core.models.simple_scenario import SimpleScenario
+from trace_feature.core.models.step_bdd import StepBdd
 
 
 def get_scenario(feature_path, line):

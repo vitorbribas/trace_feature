@@ -1,7 +1,7 @@
 import pytest
 import json
 import os
-from trace_feature.core.models import StepBdd
+from trace_feature.core.models.step_bdd import StepBdd
 
 class TestStepBddInstance:
   @pytest.fixture
