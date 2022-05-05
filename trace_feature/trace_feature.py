@@ -72,26 +72,12 @@ def trace(analyse, methods, spec, lista, project, feature, scenario, url):
     project_path = os.path.abspath(project)
 
     if lista:
-        features = read_all_bdds(project_path)
-        for existing_feature in features:
-            print(existing_feature)
-        print('-----------------------------------')
-        print('Number of Features: ', len(features))
+        list_execution(project_path)
     else:
-
         if methods:
-            project_methods = read_methods(project_path)
-            install_excellent_gem()
-            project_methods.methods = analyse_methods(project_methods.methods)
-            send_all_methods(project_methods, url)
-            for method in project_methods.methods:
-                print('Name: ', method.method_name)
-                print('Path: ', method.class_path)
-            print(len(project_methods.methods))
+            methods_execution(project_path, url)
         elif analyse:
-            project_methods = read_methods(project_path)
-            install_excellent_gem()
-            project_methods.methods = analyse_methods(project_methods.methods)
+            analyse_execution(project_path)
         else:
             #  TO DO: language = find_language(path)
             language = 'Ruby'
@@ -123,3 +109,26 @@ def trace(analyse, methods, spec, lista, project, feature, scenario, url):
                     else:
                         print('Full Execution!')
                         execution.execute_all_features(project_path, url)
+
+def list_execution(project_path):
+    features = read_all_bdds(project_path)
+    for existing_feature in features:
+        print(existing_feature)
+    print('-----------------------------------')
+    print('Number of Features: ', len(features))
+
+
+def methods_execution(project_path, url):
+    project_methods = read_methods(project_path)
+    install_excellent_gem()
+    project_methods.methods = analyse_methods(project_methods.methods)
+    send_all_methods(project_methods, url)
+    for method in project_methods.methods:
+        print('Name: ', method.method_name)
+        print('Path: ', method.class_path)
+    print(len(project_methods.methods))
+
+def analyse_execution(project_path):
+    project_methods = read_methods(project_path)
+    install_excellent_gem()
+    project_methods.methods = analyse_methods(project_methods.methods)
